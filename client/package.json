@@ -11,13 +11,16 @@
   "dependencies": {
     "@expo-google-fonts/press-start-2p": "^0.2.3",
     "@expo/webpack-config": "^18.0.1",
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
     "expo": "~48.0.11",
     "expo-font": "^11.1.1",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.6",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.10",
+    "react-navigation": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
