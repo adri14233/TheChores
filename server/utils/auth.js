@@ -1,18 +1,15 @@
 const jwt = require('jsonwebtoken');
-const userController = require('../controllers/user');
+const { checkUserExist } = require('../controllers/user2');
+const bcrypt = require('bcrypt');
 
-console.log( userController)
 // Secret key for signing and verifying JWTs
 const JWT_SECRET = 'supersecretkey';
 
 const getLogin = async (ctx) => {
-  console.log(userController)
-  console.log('HOOOOLA', ctx.request.body)
   const { username, password } = ctx.request.body;
 
   // Verify the username and password against the database
-  const user = await userController.checkUserExist(username);
-  console.log(user)
+  const user = await checkUserExist(username);
   if (user && await bcrypt.compare(password, user.password)) {
     // User is authenticated, generate a JWT with their user ID
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
