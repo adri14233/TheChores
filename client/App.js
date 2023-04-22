@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Button, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
 import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
@@ -43,49 +43,47 @@ function LeaderboardButtonHeader() {
 
   return (
     <TouchableOpacity style={styles.button} onPress={handlePress}>
-      <Text style={styles.text}>Login</Text>
+      <Text style={styles.text}>Leaderboard</Text>
     </TouchableOpacity>
   );
 }
 
 function LoginScreen() {
-  const email = useSelector(state => state.email);
-  const password = useSelector(state => state.password);
-  const token = useSelector(state => state.token);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-
-  const [localEmail, setEmail] = useState("");
-  const [localPassword, setPassword] = useState("");
-
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    await dispatch({type: 'SET_EMAIL', payload: localEmail});
-    await dispatch({type: 'SET_PASSWORD', payload: localPassword});
-
-    const creds = {
-      username: localEmail,
-      password: localPassword
-    }
-
-    // Add new event to MongoDB
     try {
-      fetch('http://192.168.0.25:3001/login', {
+      const creds = {
+        username: email,
+        password: password
+      };
+
+      const response = await fetch('http://192.168.0.25:3001/login', {
         method: 'POST',
         headers: {
           "Content-Type":"application/json"
         },
         body: JSON.stringify(creds)
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get token');
+      }
+
+      const data = await response.json();
+      const token = data.token;
+
+      dispatch({type: 'SET_EMAIL', payload: email});
+      dispatch({type: 'SET_PASSWORD', payload: password});
+      dispatch({type: 'SET_TOKEN', payload: token});
+
+      navigation.navigate("Tasks");
     } catch(err) {
-      console.log(err)
+      console.log(err);
     }
-
-
-    // console.log(token)
-    // navigation.navigate("Tasks");
   };
 
   const handleRegister = () => {
@@ -96,13 +94,13 @@ function LoginScreen() {
     <View style={styles.login.container}>
       <TextInput
         placeholder="Email"
-        value={localEmail}
+        value={email}
         onChangeText={(text) => setEmail(text)}
         style={styles.login.input}
       />
       <TextInput
         placeholder="Password"
-        value={localPassword}
+        value={password}
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
         style={styles.login.input}
@@ -186,16 +184,29 @@ function RegisterScreen() {
 function TasksScreen () {
   const [chores, setChores] = useState([]);
   const isFocused = useIsFocused();
+  const token = useSelector(state => state.token);
 
   useEffect(() => {
-    console.log("HOOOOLA")
-    fetch('http://192.168.0.25:3001/chores')
-    .then(response => response.json())
-    .then(data => {
-      setChores(data);
-    })
-    .catch(error => console.error(error))
-  }, [isFocused]);
+    getChores('http://192.168.0.25:3001/chores', token).then(choreList => setChores(choreList));
+  }, [isFocused, token]);
+
+  async function getChores (url, token) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+      }});
+
+      if (!response.ok) {
+        throw new Error('Failed to get chores');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -212,6 +223,7 @@ function NewTaskScreen () {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const navigation = useNavigation();
+  const token = useSelector(state => state.token);
 
   async function handlePress () {
     const task = {
@@ -224,12 +236,13 @@ function NewTaskScreen () {
       await fetch('http://192.168.0.25:3001/chore', {
         method: 'POST',
         headers: {
+          "Authorization": `Bearer ${token}`,
           "Content-Type":"application/json"
         },
         body: JSON.stringify(task)
       })
     } catch(err) {
-      console.log(err)
+      Alert.alert("Error", err.message);
     }
 
     navigation.navigate("Tasks");
@@ -256,29 +269,30 @@ function NewTaskScreen () {
   );
 }
 
-// function LeaderboardScreen () {
-//   const [leaderboardMembers, setLeaderboardMembers] = useState([]);
-//   const isFocused = useIsFocused();
+function LeaderboardScreen () {
+  // const [leaderboardMembers, setLeaderboardMembers] = useState([]);
+  // const isFocused = useIsFocused();
 
-//   useEffect(() => {
-//     fetch('http://192.168.0.25:3001/chores')
-//     .then(response => response.json())
-//     .then(data => {
-//       setLeaderboardMembers(data);
-//     })
-//     .catch(error => console.error(error))
-//   }, [isFocused]);
+  // useEffect(() => {
+  //   fetch('http://192.168.0.25:3001/chores')
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     setLeaderboardMembers(data);
+  //   })
+  //   .catch(error => console.error(error))
+  // }, [isFocused]);
 
-//   return (
-//     <ScrollView style={styles.container}>
-//       <View id="leaderboard" style={styles.choresList}>
-//       {leaderboardMembers.map((member, index) => (
-//         <ChoreButton key={index} title={member.name}/>
-//       ))}
-//       </View>
-//     </ScrollView>
-//   );
-// }
+  return (
+    <ScrollView style={styles.container}>
+      {/* <View id="leaderboard" style={styles.choresList}>
+      {leaderboardMembers.map((member, index) => (
+        <ChoreButton key={index} title={member.name}/>
+      ))}
+      </View> */}
+      <Text>HERE GOES THE LEADERBOARD</Text>
+    </ScrollView>
+  );
+}
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -313,7 +327,7 @@ export default function App() {
             }}
           />
           <Stack.Screen name='New Task' component={NewTaskScreen} options={{headerLeft: null}}/>
-          {/* <Stack.Screen name='Leaderboard' component={LeaderboardScreen} options={{headerLeft: null}}/> */}
+          <Stack.Screen name='Leaderboard' component={LeaderboardScreen}/>
         </Stack.Navigator>
         <StatusBar style="light" backgroundColor="blue"/>
       </NavigationContainer>

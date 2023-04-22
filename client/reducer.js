@@ -12,6 +12,8 @@ const loginReducer = (state = initialState, action) => {
       return {...state, email: action.payload};
     case 'SET_PASSWORD':
       return {...state, password: action.payload};
+    case 'SET_TOKEN':
+      return {...state, token: action.payload};
     default:
       return state;
   }
