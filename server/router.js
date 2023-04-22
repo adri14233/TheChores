@@ -28,6 +28,6 @@ router.post('/action', postAction);
 router.get('/user/:id/actions', getUserActions);
 router.get('/user/:userId/group/:groupId/actions', getUserActionsInGroup);
 
-router.get('/login', getLogin)
+router.post('/login', getLogin);
 
 module.exports = router;

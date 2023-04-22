@@ -3,7 +3,14 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Button
 import { useState, useEffect } from 'react';
 import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
 import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack"; 
+import { createStackNavigator } from "@react-navigation/stack";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import loginReducer from './reducer';
+
+let store = createStore(loginReducer);
 
 function ChoreButton({ title }) {
   return (
@@ -42,12 +49,43 @@ function LeaderboardButtonHeader() {
 }
 
 function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const email = useSelector(state => state.email);
+  const password = useSelector(state => state.password);
+  const token = useSelector(state => state.token);
+  const dispatch = useDispatch();
+
+  const [localEmail, setEmail] = useState("");
+  const [localPassword, setPassword] = useState("");
+
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    navigation.navigate("Tasks");
+  const handleLogin = async () => {
+    await dispatch({type: 'SET_EMAIL', payload: localEmail});
+    await dispatch({type: 'SET_PASSWORD', payload: localPassword});
+
+    const creds = {
+      username: localEmail,
+      password: localPassword
+    }
+
+    // Add new event to MongoDB
+    try {
+      fetch('http://192.168.0.25:3001/login', {
+        method: 'POST',
+        headers: {
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(creds)
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+    } catch(err) {
+      console.log(err)
+    }
+
+
+    // console.log(token)
+    // navigation.navigate("Tasks");
   };
 
   const handleRegister = () => {
@@ -58,13 +96,13 @@ function LoginScreen() {
     <View style={styles.login.container}>
       <TextInput
         placeholder="Email"
-        value={email}
+        value={localEmail}
         onChangeText={(text) => setEmail(text)}
         style={styles.login.input}
       />
       <TextInput
         placeholder="Password"
-        value={password}
+        value={localPassword}
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
         style={styles.login.input}
@@ -87,9 +125,34 @@ function RegisterScreen() {
   const [lastName, setLastName] = useState("");
   const navigation = useNavigation();
 
-  const handleRegister = () => {
-    navigation.navigate("Tasks");
-  };
+  async function handlePress () {
+    const user = {
+      email,
+      password,
+      firstName,
+      lastName
+    }
+
+    // Add new user to MongoDB
+    try {
+      const resp = await fetch('http://192.168.0.25:3001/user', {
+        method: 'POST',
+        headers: {
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(task)
+      })
+
+      if (resp !== 'User already exists!') navigation.navigate("Tasks");
+      else {
+        // Here we should show some banner
+      }
+
+    } catch(err) {
+      // Here we should show some banner
+      console.log(err)
+    }
+  }
 
   return (
     <View >
@@ -115,7 +178,7 @@ function RegisterScreen() {
         value={lastName}
         onChangeText={(text) => setLastName(text)}
       />
-      <Button title="Register" onPress={handleRegister} />
+      <Button title="Register" onPress={handlePress} />
     </View>
   );
 }
@@ -193,29 +256,29 @@ function NewTaskScreen () {
   );
 }
 
-function LeaderboardScreen () {
-  const [leaderboardMembers, setLeaderboardMembers] = useState([]);
-  const isFocused = useIsFocused();
+// function LeaderboardScreen () {
+//   const [leaderboardMembers, setLeaderboardMembers] = useState([]);
+//   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    fetch('http://192.168.0.25:3001/chores')
-    .then(response => response.json())
-    .then(data => {
-      setLeaderboardMembers(data);
-    })
-    .catch(error => console.error(error))
-  }, [isFocused]);
+//   useEffect(() => {
+//     fetch('http://192.168.0.25:3001/chores')
+//     .then(response => response.json())
+//     .then(data => {
+//       setLeaderboardMembers(data);
+//     })
+//     .catch(error => console.error(error))
+//   }, [isFocused]);
 
-  return (
-    <ScrollView style={styles.container}>
-      <View id="leaderboard" style={styles.choresList}>
-      {leaderboardMembers.map((member, index) => (
-        <ChoreButton key={index} title={member.name}/>
-      ))}
-      </View>
-    </ScrollView>
-  );
-}
+//   return (
+//     <ScrollView style={styles.container}>
+//       <View id="leaderboard" style={styles.choresList}>
+//       {leaderboardMembers.map((member, index) => (
+//         <ChoreButton key={index} title={member.name}/>
+//       ))}
+//       </View>
+//     </ScrollView>
+//   );
+// }
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -228,31 +291,33 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen
-          name="Tasks" 
-          component={TasksScreen} 
-          options={{
-            title: 'Tasks',
-            headerLeft: LeaderboardButtonHeader, // Remove the back button
-            headerRight: NewTaskButtonHeader,
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          }}
-        />
-        <Stack.Screen name='New Task' component={NewTaskScreen} options={{headerLeft: null}}/>
-        <Stack.Screen name='Leaderboard' component={LeaderboardScreen} options={{headerLeft: null}}/>
-      </Stack.Navigator>
-      <StatusBar style="light" backgroundColor="blue"/>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen
+            name="Tasks" 
+            component={TasksScreen} 
+            options={{
+              title: 'Tasks',
+              headerLeft: LeaderboardButtonHeader, // Remove the back button
+              headerRight: NewTaskButtonHeader,
+              headerStyle: {
+                backgroundColor: '#f4511e',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          />
+          <Stack.Screen name='New Task' component={NewTaskScreen} options={{headerLeft: null}}/>
+          {/* <Stack.Screen name='Leaderboard' component={LeaderboardScreen} options={{headerLeft: null}}/> */}
+        </Stack.Navigator>
+        <StatusBar style="light" backgroundColor="blue"/>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
