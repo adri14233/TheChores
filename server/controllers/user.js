@@ -6,32 +6,31 @@ const saltRounds = 10;
 const { auth } = require('../utils/auth');
 
 const postUser = async (ctx) => {
-  if (auth(ctx)) {
-    // Check if the user already exists
-    const users = await userModel.find();
+  // Check if the user already exists
+  const users = await userModel.find();
 
-    if (users.filter(user => user.email === ctx.request.body.email).length !== 0) {
-      ctx.status = 200;
-      ctx.set('Content-Type', 'text/plain');
-      ctx.body = 'User already exists!';
-    } else {
-      try {
-        let body = ctx.request.body;
-        if (body.password === '') throw new Error();
+  if (users.filter(user => user.email === ctx.request.body.email).length !== 0) {
+    ctx.status = 200;
+    ctx.set('Content-Type', 'text/plain');
+    ctx.body = 'User already exists!';
+  } else {
+    try {
+      let body = ctx.request.body;
+      if (body.password === '') throw new Error();
 
-        // Password hashing
-        const hash = await bcrypt.hash(body.password, saltRounds);
+      // Password hashing
+      const hash = await bcrypt.hash(body.password, saltRounds);
 
-        // Saving new user to DB
-        const newUser = new userModel({ ...body, password: hash });
-        await newUser.save();
-        ctx.body = `User succesfully created! \n ${body}`;
-      } catch (err) {
-        ctx.status = 400;
-        ctx.body = { err: JSON.stringify(err.message), message: 'Could not create user' };
-      }
+      // Saving new user to DB
+      const newUser = new userModel({ ...body, password: hash });
+      await newUser.save();
+      ctx.body = `User succesfully created! \n ${body}`;
+    } catch (err) {
+      ctx.status = 400;
+      ctx.body = { err: JSON.stringify(err.message), message: 'Could not create user' };
+    }
   }
-  }
+
 };
 
 const getUser = async (ctx) => {
