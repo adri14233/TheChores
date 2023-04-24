@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Button, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
 import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
@@ -14,7 +15,7 @@ let store = createStore(loginReducer);
 
 function ChoreButton({ title }) {
   return (
-    <TouchableOpacity style={styles.choreButton} >
+    <TouchableOpacity style={styles.choreButton2} >
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
@@ -28,8 +29,10 @@ function NewTaskButtonHeader() {
   };
 
   return (
-    <TouchableOpacity style={styles.button} onPress={handlePress}>
-      <Text style={styles.text}>New Task</Text>
+    <TouchableOpacity onPress={handlePress}>
+      <View style={styles.button}>
+        <Ionicons name="add-circle-outline" size={32} color="white" />
+      </View>
     </TouchableOpacity>
   );
 }
@@ -45,6 +48,49 @@ function LeaderboardButtonHeader() {
     <TouchableOpacity style={styles.button} onPress={handlePress}>
       <Text style={styles.text}>Leaderboard</Text>
     </TouchableOpacity>
+  );
+}
+
+function TasksButtonHeader () {
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.navigate("Tasks");
+  };
+
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+      <TouchableOpacity style={styles.choreButton}  onPress={handlePress}>
+        <Text style={styles.text}>NEW USER</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.choreButton}  onPress={handlePress}>
+      <Text style={styles.text}>ADD TASK</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function NewGroupButtonHeader () {
+  // Need to change and redirect to the component of creating a group
+  const navigation = useNavigation();
+
+  const handleNewGroup = () => {
+    navigation.navigate("New Group");
+  };
+
+  const handleJoinGroup = () => {
+    navigation.navigate("Join Group");
+  };
+
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+      <TouchableOpacity style={styles.choreButton}  onPress={handleNewGroup}>
+        <Text style={styles.text}>NEW GROUP</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.choreButton}  onPress={handleJoinGroup}>
+      <Text style={styles.text}>JOIN GROUP</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -80,9 +126,9 @@ function LoginScreen() {
       dispatch({type: 'SET_PASSWORD', payload: password});
       dispatch({type: 'SET_TOKEN', payload: token});
 
-      navigation.navigate("Tasks");
+      navigation.navigate("Groups");
     } catch(err) {
-      console.log(err);
+      Alert.alert("Invalid email or password.");
     }
   };
 
@@ -123,7 +169,7 @@ function RegisterScreen() {
   const [lastName, setLastName] = useState("");
   const navigation = useNavigation();
 
-  async function handlePress () {
+  async function handleRegister () {
     const user = {
       email,
       password,
@@ -138,45 +184,55 @@ function RegisterScreen() {
         headers: {
           "Content-Type":"application/json"
         },
-        body: JSON.stringify(task)
+        body: JSON.stringify(user)
       })
 
-      if (resp !== 'User already exists!') navigation.navigate("Tasks");
+      if (resp !== "User already exists!") Alert.alert("User created!");
       else {
-        // Here we should show some banner
+        throw new Error();
       }
-
     } catch(err) {
-      // Here we should show some banner
-      console.log(err)
+      Alert.alert("User already exists!");
     }
-  }
+  };
+
+  function handleLogin () {
+    navigation.navigate("Login");
+  };
 
   return (
-    <View >
-      <Text>Register</Text>
+    <View style={styles.login.container}>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={(text) => setEmail(text)}
+        style={styles.login.input}
       />
       <TextInput
         placeholder="Password"
         value={password}
         onChangeText={(text) => setPassword(text)}
         secureTextEntry
+        style={styles.login.input}
       />
       <TextInput
         placeholder="First Name"
         value={firstName}
         onChangeText={(text) => setFirstName(text)}
+        style={styles.login.input}
       />
       <TextInput
         placeholder="Last Name"
         value={lastName}
         onChangeText={(text) => setLastName(text)}
+        style={styles.login.input}
       />
-      <Button title="Register" onPress={handlePress} />
+      <TouchableOpacity style={styles.login.button} onPress={handleRegister}>
+        <Text style={styles.login.buttonText}>REGISTER</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.login.button} onPress={handleLogin}>
+        <Text style={styles.login.buttonText}>LOGIN</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -257,7 +313,7 @@ function NewTaskScreen () {
         style={styles.login.input}
       />
       <TextInput
-        placeholder="Descrition"
+        placeholder="Description"
         value={taskDescription}
         onChangeText={(text) => setTaskDescription(text)}
         style={styles.login.input}
@@ -269,28 +325,210 @@ function NewTaskScreen () {
   );
 }
 
-function LeaderboardScreen () {
-  // const [leaderboardMembers, setLeaderboardMembers] = useState([]);
-  // const isFocused = useIsFocused();
+function NewGroupScreen () {
+  const [groupName, setGroupName] = useState("");
+  const [groupDescription, setGroupDescription] = useState("");
+  const navigation = useNavigation();
+  const token = useSelector(state => state.token);
 
-  // useEffect(() => {
-  //   fetch('http://192.168.0.25:3001/chores')
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     setLeaderboardMembers(data);
-  //   })
-  //   .catch(error => console.error(error))
-  // }, [isFocused]);
+  async function handlePress () {
+    const group = {
+      name: groupName,
+      description: groupDescription
+    }
+
+    // Add new event to MongoDB
+    try {
+      await fetch('http://192.168.0.25:3001/group', {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(group)
+      })
+    } catch(err) {
+      console.log('AAAAAUX', err)
+      Alert.alert("Error", err.message);
+    }
+
+    navigation.navigate("Groups");
+  }
 
   return (
-    <ScrollView style={styles.container}>
-      {/* <View id="leaderboard" style={styles.choresList}>
-      {leaderboardMembers.map((member, index) => (
-        <ChoreButton key={index} title={member.name}/>
+    <View style={styles.login.container}>
+      <TextInput
+        placeholder="Group Name"
+        value={groupName}
+        onChangeText={(text) => setGroupName(text)}
+        style={styles.login.input}
+      />
+      <TextInput
+        placeholder="Description"
+        value={groupDescription}
+        onChangeText={(text) => setGroupDescription(text)}
+        style={styles.login.input}
+      />
+      <TouchableOpacity style={styles.login.button} onPress={handlePress}>
+        <Text style={styles.login.buttonText}>Create Group</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function JoinGroupScreen () {
+  const [groupName, setGroupName] = useState("");
+  const navigation = useNavigation();
+  const token = useSelector(state => state.token);
+
+  async function getGroups (url, token) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+      }});
+
+      if (!response.ok) {
+        throw new Error('Failed to get groups');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async function handlePress () {
+    const groups = await getGroups('http://192.168.0.25:3001/groups', token);
+    const targetedGroup = groups.filter(group => group.name === groupName);
+    console.log('HOOOOOLA', groups)
+    // Add new event to MongoDB
+    try {
+      if (targetedGroup.length === 0) throw new Error ('Group does not exist!');
+
+      await fetch(`http://192.168.0.25:3001/group/${targetedGroup._id}`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type":"application/json"
+        }
+      });
+
+      navigation.navigate("Groups");
+    } catch(err) {
+      Alert.alert("Error", err.message);
+    }
+  }
+
+  return (
+    <View style={styles.login.container}>
+      <TextInput
+        placeholder="Group Name"
+        value={groupName}
+        onChangeText={(text) => setGroupName(text)}
+        style={styles.login.input}
+      />
+      <TouchableOpacity style={styles.login.button} onPress={handlePress}>
+        <Text style={styles.login.buttonText}>Join Group</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function LeaderboardScreen () {
+  const token = useSelector(state => state.token);
+  const group = useSelector(state => state.group);
+  let [users, setUsers] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getUsers('http://192.168.0.25:3001/users', token).then(usersList => setUsers(usersList));
+  }, [isFocused, token]);
+
+  async function getUsers (url, token) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+      }});
+
+      if (!response.ok) {
+        throw new Error('Failed to get users');
+      }
+
+      const users = await response.json();
+      return users;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  // For now we want only the first group of the user
+  users = users.filter(user => group.members.includes(user._id));
+  console.log(users)
+
+  return (
+    <View style={styles.leaderBoardScreen.container}>
+    {users.map((user, index) => (
+      <View key={user._id} style={styles.leaderBoardScreen.row}>
+        <Text style={[styles.leaderBoardScreen.name, { color: index === 0 ? '#FFD700' : '#FFFFFF' }]}>
+          {user.firstName}
+        </Text>
+        <Text style={styles.leaderBoardScreen.score}>Score: {0}</Text>
+      </View>
+    ))}
+  </View>
+  );
+}
+
+function GroupsScreen () {
+  const [groups, setGroups] = useState([]);
+  const isFocused = useIsFocused();
+  const token = useSelector(state => state.token);
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    getGroups('http://192.168.0.25:3001/groups', token).then(groupList => setGroups(groupList));
+  }, [isFocused, token]);
+
+  async function getGroups (url, token) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          "Authorization": `Bearer ${token}`
+      }});
+
+      if (!response.ok) {
+        throw new Error('Failed to get groups');
+      }
+
+      const groups = await response.json();
+      return groups;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  function onPress (group) {
+    console.log(group)
+    dispatch({type: 'SET_GROUP', payload: group});
+    navigation.navigate("Leaderboard");
+  }
+
+  return (
+    <View style={styles.groupsScreen.container}>
+      {groups.map((group) => (
+        <TouchableOpacity
+          key={group._id}
+          style={styles.groupsScreen.groupContainer}
+          onPress={() => onPress(group)}
+        >
+          <Text style={styles.groupsScreen.groupTitle}>{group.name}</Text>
+        </TouchableOpacity>
       ))}
-      </View> */}
-      <Text>HERE GOES THE LEADERBOARD</Text>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -308,26 +546,138 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen
-            name="Tasks" 
-            component={TasksScreen} 
+            name="Login"
+            component={LoginScreen}
             options={{
-              title: 'Tasks',
-              headerLeft: LeaderboardButtonHeader, // Remove the back button
-              headerRight: NewTaskButtonHeader,
+              title: 'THE CHORES',
+              headerRight: null,
               headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: '#f77b4d',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
               },
             }}
           />
-          <Stack.Screen name='New Task' component={NewTaskScreen} options={{headerLeft: null}}/>
-          <Stack.Screen name='Leaderboard' component={LeaderboardScreen}/>
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{
+              title: 'NEW USER',
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: '#f77b4d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Tasks" 
+            component={TasksScreen} 
+            options={{
+              title: 'CHORES',
+              // headerLeft: LeaderboardButtonHeader, // Remove the back button
+              headerRight: NewTaskButtonHeader,
+              headerStyle: {
+                backgroundColor: '#f77b4d',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name='New Task'
+            component={NewTaskScreen}
+            options={{
+              title: 'NEW TASK',
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: '#f77b4d'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular',
+                textAlign: 'center'
+              },
+            }}
+          />
+          <Stack.Screen 
+            name='Leaderboard'
+            component={LeaderboardScreen}
+            options={{
+              title: 'LEADERBOARD',
+              // headerLeft: null, // Remove the back button
+              headerRight: TasksButtonHeader,
+              headerStyle: {
+                backgroundColor: '#f77b4d'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name='Groups'
+            component={GroupsScreen}
+            options={{
+              title: 'YOUR GROUPS',
+              headerLeft: null, // Remove the back button
+              headerRight: NewGroupButtonHeader,
+              headerStyle: {
+                backgroundColor: '#f77b4d'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name='New Group'
+            component={NewGroupScreen}
+            options={{
+              title: 'NEW GROUP',
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: '#f77b4d'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
+          <Stack.Screen
+            name='Join Group'
+            component={JoinGroupScreen}
+            options={{
+              title: 'JOIN GROUP',
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: '#f77b4d'
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontFamily: 'PressStart2P_400Regular'
+              },
+            }}
+          />
         </Stack.Navigator>
         <StatusBar style="light" backgroundColor="blue"/>
       </NavigationContainer>
@@ -347,10 +697,27 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'PressStart2P_400Regular',
-    fontSize: 16,
+    fontSize: 12,
     color: '#303030', // white color
   },
   choreButton: {
+    flex: 1,
+    width: '15%',
+    backgroundColor: '#f3b78c',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#000',
+    fontFamily: 'PressStart2P_400Regular',
+    fontSize: 16,
+    color: '#000',
+    textTransform: 'uppercase',
+  },
+  choreButton2: {
     flex: 1,
     width: '80%',
     backgroundColor: '#fff',
@@ -370,7 +737,7 @@ const styles = StyleSheet.create({
   login: {
     container: {
       flex: 1,
-      backgroundColor: '#121212',
+      backgroundColor: '#303030',
       justifyContent: 'center',
       alignItems: 'center',
     },
@@ -407,5 +774,68 @@ const styles = StyleSheet.create({
       fontFamily: 'PressStart2P_400Regular',
       textAlign: 'center',
     }
+  },
+  leaderBoardScreen: {
+    container: {
+      flex: 1,
+      backgroundColor: '#303030',
+      padding: 20,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#FFFFFF',
+      marginBottom: 10,
+      fontFamily: 'PressStart2P_400Regular',
+      textTransform: 'uppercase',
+      letterSpacing: 2,
+      textAlign: 'center',
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 10,
+    },
+    name: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      fontFamily: 'PressStart2P_400Regular',
+    },
+    score: {
+      fontSize: 18,
+      color: '#FFD700',
+      fontWeight: 'bold',
+      fontFamily: 'PressStart2P_400Regular',
+    }
+  },
+  groupsScreen: {
+    container: {
+      flex: 1,
+      backgroundColor: '#303030',
+      padding: 20,
+      fontFamily: 'PressStart2P_400Regular',
+    },
+    title: {
+      color: '#FFF',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      fontFamily: 'PressStart2P_400Regular',
+    },
+    groupContainer: {
+      backgroundColor: '#FFF',
+      borderRadius: 8,
+      marginBottom: 20,
+      paddingVertical: 16,
+      paddingHorizontal: 16,
+      fontFamily: 'PressStart2P_400Regular',
+    },
+    groupTitle: {
+      color: '#000',
+      fontSize: 18,
+      fontWeight: 'bold',
+      fontFamily: 'PressStart2P_400Regular',
+    },
   }
 });
