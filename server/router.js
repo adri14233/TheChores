@@ -16,7 +16,7 @@ router.post('/user', postUser);
 router.get('/group/:id', getGroup);
 router.get('/groups', getGroups);
 router.post('/group', postGroup);
-router.post('/group/:groupId/:userId', postUserToGroup);
+router.post('/group/:groupId', postUserToGroup);
 
 router.get('/chore/:id', getChore);
 router.get('/chores', getChores);

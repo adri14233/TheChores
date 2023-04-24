@@ -44,12 +44,14 @@ const getUser = async (ctx) => {
 };
 
 const getUsers = async (ctx) => {
-  try {
-    const users = await userModel.find();
-    ctx.body = users;
-  } catch (err) {
-    ctx.status = 400;
-    ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve all users.' };
+  if (auth(ctx)) {
+    try {
+      const users = await userModel.find();
+      ctx.body = users;
+    } catch (err) {
+      ctx.status = 400;
+      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve all users.' };
+    }
   }
 };
 

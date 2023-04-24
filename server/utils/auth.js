@@ -29,7 +29,7 @@ const auth = (ctx) => {
       // Verify the JWT and extract the user ID
       const decodedToken = jwt.verify(token, JWT_SECRET);
 
-      if (decodedToken) return true;
+      if (decodedToken) return decodedToken;
       return false;
     } catch (err) {
       // JWT is invalid or there is an error in MongoDB
