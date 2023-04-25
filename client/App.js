@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Alert, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
 import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
@@ -26,8 +25,6 @@ function ChoreButton({ title, value=0 }) {
       value: value
     }
 
-    // console.log(action);
-
     // Add new action to MongoDB
     try {
       const resp = await fetch('http://192.168.0.25:3001/action', {
@@ -48,7 +45,13 @@ function ChoreButton({ title, value=0 }) {
 
   return (
     <TouchableOpacity style={styles.choreButton2} onPress={handlePress}>
-      <Text style={styles.text}>{title}</Text>
+      {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}> */}
+        <Text style={styles.text}>{title}</Text>
+        <Image
+          source={{uri: 'https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg'}}
+          style={{ width: 20, height: 20, marginLeft: 10 }}
+        />
+      {/* </View> */}
     </TouchableOpacity>
   );
 }
@@ -481,7 +484,6 @@ function GroupsScreen () {
   }
 
   function onPress (group) {
-    console.log(group)
     dispatch({type: 'SET_GROUP', payload: group});
     navigation.navigate("Leaderboard");
   }
@@ -684,6 +686,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text: {
+    width: '70%',
+    textAlign: 'left',
     fontFamily: 'PressStart2P_400Regular',
     fontSize: 12,
     color: '#303030', // white color
@@ -708,13 +712,14 @@ const styles = StyleSheet.create({
   choreButton2: {
     flex: 1,
     width: '80%',
+    flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
     marginHorizontal: 20,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     borderWidth: 2,
     borderColor: '#000',
     fontFamily: 'PressStart2P_400Regular',
