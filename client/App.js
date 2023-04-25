@@ -430,6 +430,7 @@ function LeaderboardScreen () {
   const group = useSelector(state => state.group);
   let [users, setUsers] = useState([]);
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
 
   useEffect(() => {
     getUsers('http://192.168.0.25:3001/users', token).then(usersList => setUsers(usersList));
@@ -453,11 +454,19 @@ function LeaderboardScreen () {
     }
   }
 
+  const handleAddTask = () => {
+    navigation.navigate("Tasks");
+  };
+
+  const handleNewTask = () => {
+    navigation.navigate("New Task");
+  };
+
   // For now we want only the first group of the user
   users = users.filter(user => group.members.includes(user._id));
-  console.log(users)
 
   return (
+    <>
     <View style={styles.leaderBoardScreen.container}>
     {users.map((user, index) => (
       <View key={user._id} style={styles.leaderBoardScreen.row}>
@@ -467,7 +476,23 @@ function LeaderboardScreen () {
         <Text style={styles.leaderBoardScreen.score}>Score: {0}</Text>
       </View>
     ))}
-  </View>
+    </View>
+    <View style={styles.aux}>
+        <TouchableOpacity
+          style={styles.login.button2}
+          onPress={() => handleAddTask()}
+        >
+          <Text style={styles.login.buttonText2}>ADD TASK</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.login.button2}
+          onPress={() => handleNewTask()}
+        >
+          <Text style={styles.login.buttonText2}>NEW TASK</Text>
+        </TouchableOpacity>
+    </View>
+    </>
+
   );
 }
 
@@ -631,7 +656,7 @@ export default function App() {
             options={{
               title: 'LEADERBOARD',
               // headerLeft: null, // Remove the back button
-              headerRight: TasksButtonHeader,
+              // headerRight: TasksButtonHeader,
               headerStyle: {
                 backgroundColor: '#f77b4d'
               },
