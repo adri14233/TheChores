@@ -36,45 +36,22 @@ const postUserToGroup = async (ctx) => {
 
   if (decodedToken) {
     try {
-      if (ctx.params.groupId === '') throw new Error();
+      const groups = await groupModel.find();
+      let group = groups.filter(group => group.name === ctx.request.body.name);
 
-      const group = await groupModel.findById(ctx.params.groupId);
+      if (ctx.request.body.name === '' | group.length === 0) throw new Error('Group does not exist!');
+
+      group = group[0];
+      if (group.members.includes(decodedToken.userId)) throw new Error('User already in group!');
+
       group.members.push(decodedToken.userId);
-      await groupModel.findByIdAndUpdate(ctx.params.groupId, {members: group.members});
-      ctx.body = `User \n ${decodedToken.userId}\n succesfully added to Group \n ${ctx.params.groupId}`;
+      await groupModel.findByIdAndUpdate(group._id, {members: group.members});
+      ctx.body = `User \n ${decodedToken.userId}\n succesfully added to Group \n ${ctx.request.body.name}`;
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not create group,' };
+      ctx.body = {message: JSON.stringify(err.message)};
     }
   }
-
-  // const decodedToken = auth(ctx);
-
-  // if (decodedToken) {
-  //   // Check if the user is already within the group
-  //   const groups = await groupModel.find();
-  //   const group = groups.filter(group => group._id === ctx.params.groupId);
-
-  //   if (group.length) {
-  //     if (group.members.filter(member => member === ctx.params.userID).length) {
-  //       ctx.status = 200;
-  //       ctx.set('Content-Type', 'text/plain');
-  //       ctx.body = 'Group already exists!';
-  //     }
-  //   } else {
-  //     try {
-  //       if (ctx.params.groupId === '' | ctx.params.userId === '') throw new Error();
-
-  //       const group = await groupModel.findById(ctx.params.groupId);
-  //       group.members.push(ctx.params.userId);
-  //       await groupModel.findByIdAndUpdate(ctx.params.groupId, {members: group.members});
-  //       ctx.body = `User \n ${ctx.params.userId}\n succesfully added to Group \n ${ctx.params.groupId}`;
-  //     } catch (err) {
-  //       ctx.status = 400;
-  //       ctx.body = { err: JSON.stringify(err.message), message: 'Could not create group,' };
-  //     }
-  //   }
-  // }
 };
 
 const getGroup = async (ctx) => {
@@ -97,8 +74,7 @@ const getGroups = async (ctx) => {
   if (decodedToken) {
     try {
       let groups = await groupModel.find();
-      console.log(groups)
-      // groups = groups.filter(group => group.members.includes(decodedToken.userId));
+      groups = groups.filter(group => group.members.includes(decodedToken.userId));
       ctx.body = JSON.stringify(groups);
     } catch (err) {
       ctx.status = 400;
