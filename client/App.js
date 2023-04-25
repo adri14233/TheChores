@@ -45,13 +45,12 @@ function ChoreButton({ title, value=0 }) {
 
   return (
     <TouchableOpacity style={styles.choreButton2} onPress={handlePress}>
-      {/* <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}> */}
         <Text style={styles.text}>{title}</Text>
         <Image
           source={{uri: 'https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg'}}
           style={{ width: 20, height: 20, marginLeft: 10 }}
         />
-      {/* </View> */}
+        <Text style={{fontFamily: 'PressStart2P_400Regular'}}>{value}</Text>
     </TouchableOpacity>
   );
 }
@@ -230,7 +229,7 @@ function TasksScreen () {
     <ScrollView style={styles.container}>
       <View id="chores-list" style={styles.choresList}>
       {chores.map((chore, index) => (
-        <ChoreButton key={index} title={chore.name}/>
+        <ChoreButton key={index} title={chore.name} value={chore.value}/>
       ))}
       </View>
     </ScrollView>
@@ -240,13 +239,14 @@ function TasksScreen () {
 function NewTaskScreen () {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const navigation = useNavigation();
+  const [taskValue, setTaskValue] = useState("");
   const token = useSelector(state => state.token);
 
   async function handlePress () {
     const task = {
       name: taskName,
-      description: taskDescription
+      description: taskDescription,
+      value: taskValue
     }
 
     // Add new task to MongoDB
@@ -280,6 +280,12 @@ function NewTaskScreen () {
         placeholder="Description"
         value={taskDescription}
         onChangeText={(text) => setTaskDescription(text)}
+        style={styles.login.input}
+      />
+      <TextInput
+        placeholder="Value points of this task"
+        value={taskValue}
+        onChangeText={(text) => setTaskValue(text)}
         style={styles.login.input}
       />
       <TouchableOpacity style={styles.login.button} onPress={handlePress}>
