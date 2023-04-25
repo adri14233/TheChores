@@ -217,14 +217,13 @@ function RegisterScreen() {
           "Content-Type":"application/json"
         },
         body: JSON.stringify(user)
-      }).json();
+      });
 
-      if (resp !== "User already exists!") Alert.alert("User created!");
-      else {
-        throw new Error();
-      }
+      const data = await resp.json();
+      if (data.message === "User already exists!") Alert.alert("User already exists!");
+      if (data.message.includes('User succesfully created')) Alert.alert(`${firstName} ${lastName} user succesfully created!`);
     } catch(err) {
-      Alert.alert("User already exists!");
+      Alert.alert(err.message);
     }
   };
 
@@ -289,8 +288,9 @@ function TasksScreen () {
         throw new Error('Failed to get chores');
       }
 
-      const data = await response.json();
-      return data;
+      let chores = await response.json();
+      chores = JSON.parse(chores.message)
+      return chores;
     } catch (err) {
       throw new Error(err);
     }
@@ -319,9 +319,9 @@ function NewTaskScreen () {
       description: taskDescription
     }
 
-    // Add new event to MongoDB
+    // Add new task to MongoDB
     try {
-      await fetch('http://192.168.0.25:3001/chore', {
+      const resp = await fetch('http://192.168.0.25:3001/chore', {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -329,11 +329,13 @@ function NewTaskScreen () {
         },
         body: JSON.stringify(task)
       })
+
+      const data = await resp.json();
+      if (data.message === 'Chore already exists!') Alert.alert('Chore already exists!');
+      if (data.message.includes('Chore succesfully created')) Alert.alert(`${taskName} task succesfully created!`);
     } catch(err) {
       Alert.alert("Error", err.message);
     }
-
-    navigation.navigate("Tasks");
   }
 
   return (
@@ -360,7 +362,6 @@ function NewTaskScreen () {
 function NewGroupScreen () {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
-  const navigation = useNavigation();
   const token = useSelector(state => state.token);
 
   async function handlePress () {
@@ -371,19 +372,21 @@ function NewGroupScreen () {
 
     // Add new event to MongoDB
     try {
-      await fetch('http://192.168.0.25:3001/group', {
+      const resp = await fetch('http://192.168.0.25:3001/group', {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type":"application/json"
         },
         body: JSON.stringify(group)
-      })
+      });
+
+      const data = await resp.json();
+      if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
+      if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
     } catch(err) {
       Alert.alert("Error", err.message);
     }
-
-    navigation.navigate("Groups");
   }
 
   return (
@@ -474,14 +477,11 @@ function LeaderboardScreen () {
           "Authorization": `Bearer ${token}`
       }});
 
-      if (!response.ok) {
-        throw new Error('Failed to get users');
-      }
-
-      const users = await response.json();
+      let users = await response.json();
+      users = JSON.parse(users.message);
       return users;
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err.message);
     }
   }
 
@@ -545,11 +545,8 @@ function GroupsScreen () {
           "Authorization": `Bearer ${token}`
       }});
 
-      if (!response.ok) {
-        throw new Error('Failed to get groups');
-      }
-
-      const groups = await response.json();
+      let groups = await response.json();
+      groups = JSON.parse(groups.message);
       return groups;
     } catch (err) {
       throw new Error(err);
