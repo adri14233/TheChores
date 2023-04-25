@@ -13,9 +13,41 @@ import loginReducer from './reducer';
 
 let store = createStore(loginReducer);
 
-function ChoreButton({ title }) {
+function ChoreButton({ title, value=0 }) {
+  const token = useSelector(state => state.token);
+  const group = useSelector(state => state.group);
+
+  async function handlePress () {
+    const action = {
+      time: new Date().toString(),
+      user: token,
+      group: group._id,
+      chore: title,
+      value: value
+    }
+
+    // console.log(action);
+
+    // Add new action to MongoDB
+    try {
+      const resp = await fetch('http://192.168.0.25:3001/action', {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(action)
+      });
+
+      const data = await resp.json();
+      if (data.message.includes('Action succesfully saved')) Alert.alert("Chore succesfully added!");
+    } catch(err) {
+      Alert.alert("Error", err.message);
+    }
+  }
+
   return (
-    <TouchableOpacity style={styles.choreButton2} >
+    <TouchableOpacity style={styles.choreButton2} onPress={handlePress}>
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
@@ -348,7 +380,6 @@ function NewGroupScreen () {
         body: JSON.stringify(group)
       })
     } catch(err) {
-      console.log('AAAAAUX', err)
       Alert.alert("Error", err.message);
     }
 
@@ -621,8 +652,6 @@ export default function App() {
             component={TasksScreen} 
             options={{
               title: 'CHORES',
-              // headerLeft: LeaderboardButtonHeader, // Remove the back button
-              headerRight: NewTaskButtonHeader,
               headerStyle: {
                 backgroundColor: '#f77b4d',
               },
@@ -655,8 +684,6 @@ export default function App() {
             component={LeaderboardScreen}
             options={{
               title: 'LEADERBOARD',
-              // headerLeft: null, // Remove the back button
-              // headerRight: TasksButtonHeader,
               headerStyle: {
                 backgroundColor: '#f77b4d'
               },
@@ -673,7 +700,6 @@ export default function App() {
             options={{
               title: 'YOUR GROUPS',
               headerLeft: null, // Remove the back button
-              // headerRight: NewGroupButtonHeader,
               headerStyle: {
                 backgroundColor: '#f77b4d'
               },
