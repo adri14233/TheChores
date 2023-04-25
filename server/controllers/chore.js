@@ -14,7 +14,7 @@ const postChore = async (ctx) => {
     } else {
       try {
         let body = ctx.request.body;
-        if (body.name === '') throw new Error();
+        if (!body.name | !body.value) throw new Error();
 
         // Saving new chore to DB
         const newChore = new choreModel(body);
