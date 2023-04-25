@@ -11,8 +11,7 @@ const postUser = async (ctx) => {
 
   if (users.filter(user => user.email === ctx.request.body.email).length !== 0) {
     ctx.status = 200;
-    ctx.set('Content-Type', 'text/plain');
-    ctx.body = 'User already exists!';
+    ctx.body = { message: 'User already exists!' };
   } else {
     try {
       let body = ctx.request.body;
@@ -24,13 +23,12 @@ const postUser = async (ctx) => {
       // Saving new user to DB
       const newUser = new userModel({ ...body, password: hash });
       await newUser.save();
-      ctx.body = `User succesfully created! \n ${body}`;
+      ctx.body = { message: `User succesfully created! \n ${body}` };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not create user' };
+      ctx.body = { message: 'Could not create user' };
     }
   }
-
 };
 
 const getUser = async (ctx) => {
@@ -47,10 +45,10 @@ const getUsers = async (ctx) => {
   if (auth(ctx)) {
     try {
       const users = await userModel.find();
-      ctx.body = users;
+      ctx.body = { message: JSON.stringify(users) };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve all users.' };
+      ctx.body = { message: 'Could not retrieve all users.' };
     }
   }
 };

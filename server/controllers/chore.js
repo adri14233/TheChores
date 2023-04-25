@@ -10,8 +10,7 @@ const postChore = async (ctx) => {
 
     if (chores.filter(chore => chore.name === ctx.request.body.name).length !== 0) {
       ctx.status = 200;
-      ctx.set('Content-Type', 'text/plain');
-      ctx.body = 'Chore already exists!';
+      ctx.body = { message: 'Chore already exists!'};
     } else {
       try {
         let body = ctx.request.body;
@@ -20,10 +19,10 @@ const postChore = async (ctx) => {
         // Saving new chore to DB
         const newChore = new choreModel(body);
         await newChore.save();
-        ctx.body = `Chore succesfully created! \n ${JSON.stringify(body)}`;
+        ctx.body = { message: `Chore succesfully created! \n ${JSON.stringify(body)}` };
       } catch (err) {
         ctx.status = 400;
-        ctx.body = { err: JSON.stringify(err.message), message: 'Could not create chore,' };
+        ctx.body = { message: 'Could not create chore!' };
       }
   }
   }
@@ -33,10 +32,10 @@ const getChore = async (ctx) => {
   if (auth(ctx)) {
     try {
       const chore = await choreModel.findById(ctx.params.id);
-      ctx.body = JSON.stringify(chore);
+      ctx.body = { message: JSON.stringify(chore) };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve chore by such id.' };
+      ctx.body = { message: 'Could not retrieve chore by such id.' };
     }
   }
 };
@@ -45,10 +44,10 @@ const getChores = async (ctx) => {
   if(auth(ctx)) {
     try {
       const chores = await choreModel.find();
-      ctx.body = JSON.stringify(chores);
+      ctx.body = { message: JSON.stringify(chores) };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve all chores.' };
+      ctx.body = { message: 'Could not retrieve all chores.' };
     }
   }
 };

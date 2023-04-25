@@ -12,8 +12,7 @@ const postGroup = async (ctx) => {
 
     if (groups.filter(group => group.name === ctx.request.body.name).length !== 0) {
       ctx.status = 200;
-      ctx.set('Content-Type', 'text/plain');
-      ctx.body = 'Group already exists!';
+      ctx.body = { message: 'Group already exists!' };
     } else {
       try {
         let body = ctx.request.body;
@@ -22,10 +21,10 @@ const postGroup = async (ctx) => {
         // Saving new group to DB
         const newGroup = new groupModel(body);
         await newGroup.save();
-        ctx.body = `Group succesfully created! \n ${JSON.stringify(body)}`;
+        ctx.body = { message: `Group succesfully created! \n ${JSON.stringify(body)}` };
       } catch (err) {
         ctx.status = 400;
-        ctx.body = { err: JSON.stringify(err.message), message: 'Could not create group,' };
+        ctx.body = { message: 'Could not create group!' };
       }
     }
   }
@@ -46,10 +45,10 @@ const postUserToGroup = async (ctx) => {
 
       group.members.push(decodedToken.userId);
       await groupModel.findByIdAndUpdate(group._id, {members: group.members});
-      ctx.body = `User \n ${decodedToken.userId}\n succesfully added to Group \n ${ctx.request.body.name}`;
+      ctx.body = { message: `User \n ${decodedToken.userId}\n succesfully added to Group \n ${ctx.request.body.name}` };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = {message: JSON.stringify(err.message)};
+      ctx.body = { message: JSON.stringify(err.message) };
     }
   }
 };
@@ -60,10 +59,10 @@ const getGroup = async (ctx) => {
   if (decodedToken) {
     try {
       const group = await groupModel.findById(ctx.params.id);
-      ctx.body = JSON.stringify(group);
+      ctx.body = { message: JSON.stringify(group) };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve group by such id.' };
+      ctx.body = { message: 'Could not retrieve group by such id.' };
     }
   }
 };
@@ -75,10 +74,10 @@ const getGroups = async (ctx) => {
     try {
       let groups = await groupModel.find();
       groups = groups.filter(group => group.members.includes(decodedToken.userId));
-      ctx.body = JSON.stringify(groups);
+      ctx.body = { message: JSON.stringify(groups) };
     } catch (err) {
       ctx.status = 400;
-      ctx.body = { err: JSON.stringify(err.message), message: 'Could not retrieve all groups.' };
+      ctx.body = { message: 'Could not retrieve all groups.' };
     }
   }
 };
