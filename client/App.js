@@ -70,29 +70,29 @@ function TasksButtonHeader () {
   );
 }
 
-function NewGroupButtonHeader () {
-  // Need to change and redirect to the component of creating a group
-  const navigation = useNavigation();
+// function NewGroupButtonHeader () {
+//   // Need to change and redirect to the component of creating a group
+//   const navigation = useNavigation();
 
-  const handleNewGroup = () => {
-    navigation.navigate("New Group");
-  };
+//   const handleNewGroup = () => {
+//     navigation.navigate("New Group");
+//   };
 
-  const handleJoinGroup = () => {
-    navigation.navigate("Join Group");
-  };
+//   const handleJoinGroup = () => {
+//     navigation.navigate("Join Group");
+//   };
 
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-      <TouchableOpacity style={styles.choreButton}  onPress={handleNewGroup}>
-        <Text style={styles.text}>NEW GROUP</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.choreButton}  onPress={handleJoinGroup}>
-      <Text style={styles.text}>JOIN GROUP</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+//   return (
+//     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+//       <TouchableOpacity style={styles.choreButton}  onPress={handleNewGroup}>
+//         <Text style={styles.text}>NEW GROUP</Text>
+//       </TouchableOpacity>
+//       <TouchableOpacity style={styles.choreButton}  onPress={handleJoinGroup}>
+//       <Text style={styles.text}>JOIN GROUP</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// }
 
 function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -185,7 +185,7 @@ function RegisterScreen() {
           "Content-Type":"application/json"
         },
         body: JSON.stringify(user)
-      })
+      }).json();
 
       if (resp !== "User already exists!") Alert.alert("User created!");
       else {
@@ -378,44 +378,33 @@ function NewGroupScreen () {
 
 function JoinGroupScreen () {
   const [groupName, setGroupName] = useState("");
-  const navigation = useNavigation();
   const token = useSelector(state => state.token);
 
-  async function getGroups (url, token) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-      }});
-
-      if (!response.ok) {
-        throw new Error('Failed to get groups');
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
   async function handlePress () {
-    const groups = await getGroups('http://192.168.0.25:3001/groups', token);
-    const targetedGroup = groups.filter(group => group.name === groupName);
-    console.log('HOOOOOLA', groups)
-    // Add new event to MongoDB
+    
+    // Add user to group in MongoDB
     try {
-      if (targetedGroup.length === 0) throw new Error ('Group does not exist!');
-
-      await fetch(`http://192.168.0.25:3001/group/${targetedGroup._id}`, {
+      const resp = await fetch(`http://192.168.0.25:3001/group/member`, {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`,
           "Content-Type":"application/json"
-        }
+        },
+        body: JSON.stringify({'name': groupName})
       });
 
-      navigation.navigate("Groups");
+      const data = await resp.json();
+
+      if (data.message === 'Group does not exist!') {
+        Alert.alert("Error: Group does not exist!");
+      } else if (data.message === 'User already in group!') {
+        Alert.alert("Error: User already in group!");
+      } else if (data.message.includes('succesfully added to Group')) {
+        Alert.alert("User added to the group!");
+      } else {
+        throw new Error(data.message);
+      }
+
     } catch(err) {
       Alert.alert("Error", err.message);
     }
@@ -517,7 +506,16 @@ function GroupsScreen () {
     navigation.navigate("Leaderboard");
   }
 
+  const handleNewGroup = () => {
+    navigation.navigate("New Group");
+  };
+
+  const handleJoinGroup = () => {
+    navigation.navigate("Join Group");
+  };
+
   return (
+    <>
     <View style={styles.groupsScreen.container}>
       {groups.map((group) => (
         <TouchableOpacity
@@ -529,6 +527,21 @@ function GroupsScreen () {
         </TouchableOpacity>
       ))}
     </View>
+    <View style={styles.aux}>
+        <TouchableOpacity
+          style={styles.login.button2}
+          onPress={() => handleJoinGroup()}
+        >
+          <Text style={styles.login.buttonText2}>JOIN GROUP</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.login.button2}
+          onPress={() => handleNewGroup()}
+        >
+          <Text style={styles.login.buttonText2}>CREATE GROUP</Text>
+        </TouchableOpacity>
+    </View>
+    </>
   );
 }
 
@@ -635,7 +648,7 @@ export default function App() {
             options={{
               title: 'YOUR GROUPS',
               headerLeft: null, // Remove the back button
-              headerRight: NewGroupButtonHeader,
+              // headerRight: NewGroupButtonHeader,
               headerStyle: {
                 backgroundColor: '#f77b4d'
               },
@@ -768,8 +781,30 @@ const styles = StyleSheet.create({
       color: '#000',
       textTransform: 'uppercase',
     },
+    button2: {
+      backgroundColor: '#f3b78c',
+      borderRadius: 10,
+      padding: 10,
+      marginVertical: 10,
+      marginHorizontal: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 2,
+      borderColor: '#000',
+      fontFamily: 'PressStart2P_400Regular',
+      fontSize: 16,
+      color: '#000',
+      textTransform: 'uppercase',
+    },
+
     buttonText: {
       color: '#ccc',
+      fontSize: 20,
+      fontFamily: 'PressStart2P_400Regular',
+      textAlign: 'center',
+    },
+    buttonText2: {
+      color: '#303030',
       fontSize: 20,
       fontFamily: 'PressStart2P_400Regular',
       textAlign: 'center',
@@ -837,5 +872,10 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       fontFamily: 'PressStart2P_400Regular',
     },
+  },
+  aux: {
+    backgroundColor: '#303030',
+    padding: 20,
+    fontFamily: 'PressStart2P_400Regular',
   }
 });
