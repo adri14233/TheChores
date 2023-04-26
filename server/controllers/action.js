@@ -4,12 +4,15 @@ const actionModel = require('../models/action');
 const { auth } = require('../utils/auth');
 
 const postAction = async (ctx) => {
-  if (auth(ctx)) {
+  const decodedToken = auth(ctx);
+
+  if (decodedToken) {
     try {
       let body = ctx.request.body;
-      if (body.time === '' | body.user === '' | body.group === '' | body.chore === '') throw new Error();
+      if (!body.time | !body.user | !body.group | !body.chore | !body.value) throw new Error();
   
       // Saving new actioon to DB
+      body.user = decodedToken.userId;
       const newAction = new actionModel(body);
       await newAction.save();
       ctx.body = { message: `Action succesfully saved! \n ${JSON.stringify(ctx.request.body)}` };
