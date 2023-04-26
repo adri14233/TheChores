@@ -403,22 +403,59 @@ function LeaderboardScreen () {
   const navigation = useNavigation();
 
   useEffect(() => {
-    getUsers('http://192.168.0.25:3001/users', token).then(usersList => setUsers(usersList));
+    getUsers(token).then(usersList => setUsers(usersList));
   }, [isFocused, token]);
 
-  async function getUsers (url, token) {
+  async function getUsers (token) {
+    let usersData;
+    let actions;
+
+    // We retrieve the users within the group
     try {
-      const response = await fetch(url, {
+      const response = await fetch('http://192.168.0.25:3001/users', {
         headers: {
           "Authorization": `Bearer ${token}`
       }});
 
-      let users = await response.json();
-      users = JSON.parse(users.message);
-      return users;
+      usersData = await response.json();
+      usersData = JSON.parse(usersData.message);
+      usersData = usersData.filter(user => group.members.includes(user._id));
     } catch (err) {
       throw new Error(err.message);
     }
+
+    // We retrieve actions within the group
+    try {
+      const response = await fetch('http://192.168.0.25:3001/actions', {
+        headers: {
+          "Authorization": `Bearer ${token}`
+      }});
+
+      actions = await response.json();
+      actions = JSON.parse(actions.message);
+      actions = actions.filter(action => group._id === action.group);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+
+    // We calculate the score for each user
+    for (let i = 0; i < usersData.length; i++) {
+      userActions = actions.filter(action => action.user === usersData[i]._id);
+      let score = 0;
+
+      if (userActions.length > 0) {
+        for (let j = 0; j < userActions.length; j++) {
+          score += userActions[j].value;
+        }
+      }
+
+      usersData[i].score = score;
+    }
+
+    // We order the users arr of objects by the score
+    usersData.sort((a, b) => b.score - a.score);
+
+    return usersData;
   }
 
   const handleAddTask = () => {
@@ -429,9 +466,6 @@ function LeaderboardScreen () {
     navigation.navigate("New Task");
   };
 
-  // For now we want only the first group of the user
-  users = users.filter(user => group.members.includes(user._id));
-
   return (
     <>
     <View style={styles.leaderBoardScreen.container}>
@@ -440,7 +474,8 @@ function LeaderboardScreen () {
         <Text style={[styles.leaderBoardScreen.name, { color: index === 0 ? '#FFD700' : '#FFFFFF' }]}>
           {user.firstName}
         </Text>
-        <Text style={styles.leaderBoardScreen.score}>Score: {0}</Text>
+        <Text style={styles.leaderBoardScreen.score}>Score: </Text>
+        <Text style={styles.leaderBoardScreen.score}>{user.score}</Text>
       </View>
     ))}
     </View>
@@ -819,11 +854,13 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     name: {
+      width: '53%',
       fontSize: 18,
       fontWeight: 'bold',
       fontFamily: 'PressStart2P_400Regular',
     },
     score: {
+      width: '40%',
       fontSize: 18,
       color: '#FFD700',
       fontWeight: 'bold',
