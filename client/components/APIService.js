@@ -1,8 +1,10 @@
+const ROOT_URL = 'http://10.10.22.64:3001' | 'http://10.10.22.63:3001';
+
 /* ACTIONS */
 
 export async function postAction (action, token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/action', {
+    const resp = await fetch((ROOT_URL + '/action'), {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -20,7 +22,7 @@ export async function postAction (action, token) {
 
 export async function getActions (token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/actions', {
+    const resp = await fetch((ROOT_URL + '/actions'), {
       headers: {
         "Authorization": `Bearer ${token}`
     }});
@@ -41,7 +43,7 @@ export async function getActions (token) {
 
 export async function getLogin (credentials) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/login', {
+    const resp = await fetch((ROOT_URL + '/login'), {
       method: 'POST',
       headers: {
         "Content-Type":"application/json"
@@ -71,7 +73,7 @@ export async function getLogin (credentials) {
 
 export async function postUser (user) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/user', {
+    const resp = await fetch((ROOT_URL + '/user'), {
       method: 'POST',
       headers: {
         "Content-Type":"application/json"
@@ -90,7 +92,7 @@ export async function postUser (user) {
 
 export async function getUsers (token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/users', {
+    const resp = await fetch((ROOT_URL + '/users'), {
       headers: {
         "Authorization": `Bearer ${token}`
     }});
@@ -108,9 +110,9 @@ export async function getUsers (token) {
 
 /* CHORES */
 
-export async function getChores () {
+export async function getChores (token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/chores', {
+    const resp = await fetch((ROOT_URL + '/chores'), {
       headers: {
         "Authorization": `Bearer ${token}`
     }});
@@ -130,7 +132,7 @@ export async function getChores () {
 
 export async function postChore (chore, token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/chore', {
+    const resp = await fetch((ROOT_URL + '/chore'), {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -152,7 +154,7 @@ export async function postChore (chore, token) {
 
 export async function postGroup (group, token) {
   try {
-    const resp = await fetch('http://192.168.0.25:3001/group', {
+    const resp = await fetch((ROOT_URL + '/group'), {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -172,7 +174,7 @@ export async function postGroup (group, token) {
 
 export async function postUserToGroup (groupName, token) {
   try {
-    const resp = await fetch(`http://192.168.0.25:3001/group/member`, {
+    const resp = await fetch((ROOT_URL + '/group/member'), {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -198,7 +200,7 @@ export async function postUserToGroup (groupName, token) {
 
 export async function getGroups (token) {
   try {
-    const resp = await fecth('http://192.168.0.25:3001/groups', {
+    const resp = await fecth((ROOT_URL + '/groups'), {
       headers: {
         "Authorization": `Bearer ${token}`
     }});
