@@ -1,3 +1,6 @@
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+
 const dispatch = useDispatch();
 const navigation = useNavigation();
 
