@@ -1,29 +1,29 @@
-const jwt = require('jsonwebtoken');
-const { checkUserExist } = require('../controllers/user2');
-const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const { checkUserExist } = require("../controllers/user2");
+const bcrypt = require("bcrypt");
 
 // Secret key for signing and verifying JWTs
-const JWT_SECRET = 'supersecretkey';
+const JWT_SECRET = "supersecretkey";
 
 const getLogin = async (ctx) => {
   const { username, password } = ctx.request.body;
 
   // Verify the username and password against the database
   const user = await checkUserExist(username);
-  if (user && await bcrypt.compare(password, user.password)) {
+  if (user && (await bcrypt.compare(password, user.password))) {
     // User is authenticated, generate a JWT with their user ID
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
     ctx.body = { token };
   } else {
     // User is not authenticated, return 401 Unauthorized
     ctx.status = 401;
-    ctx.body = { message: 'Invalid username or password' };
+    ctx.body = { message: "Invalid username or password" };
   }
-}
+};
 
 const auth = (ctx) => {
   const authHeader = ctx.request.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
+  if (authHeader && authHeader.startsWith("Bearer ")) {
     const token = authHeader.substring(7);
     try {
       // Verify the JWT and extract the user ID
@@ -39,8 +39,8 @@ const auth = (ctx) => {
   } else {
     // Authorization header is missing or not a bearer token
     ctx.status = 401;
-    ctx.body = { message: 'Missing or invalid token' };
+    ctx.body = { message: "Missing or invalid token" };
   }
-}
+};
 
-module.exports = { getLogin, auth }
+module.exports = { getLogin, auth };
