@@ -1,56 +1,79 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Alert, Image } from 'react-native';
-import { useState, useEffect } from 'react';
-import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
-import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  Alert,
+  Image,
+} from "react-native";
+import { useState, useEffect } from "react";
+import {
+  useFonts,
+  PressStart2P_400Regular,
+} from "@expo-google-fonts/press-start-2p";
+import {
+  NavigationContainer,
+  useNavigation,
+  useIsFocused,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { useDispatch, useSelector } from 'react-redux';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import loginReducer from './reducer';
+import { useDispatch, useSelector } from "react-redux";
+import { Provider } from "react-redux";
+import { legacy_createStore } from "redux";
+import loginReducer from "./reducer";
 
-let store = createStore(loginReducer);
+let store = legacy_createStore(loginReducer);
 
-function ChoreButton({ title, value=0 }) {
-  const token = useSelector(state => state.token);
-  const group = useSelector(state => state.group);
+//Components
+import Leaderboard from "./components/Leaderboard"
+import GroupsScreen from "./components/GroupsScreen";
 
-  async function handlePress () {
+function ChoreButton({ title, value = 0 }) {
+  const token = useSelector((state) => state.token);
+  const group = useSelector((state) => state.group);
+
+  async function handlePress() {
     const action = {
       time: new Date().toString(),
       user: token,
       group: group._id,
       chore: title,
-      value: value
-    }
+      value: value,
+    };
 
     // Add new action to MongoDB
     try {
-      const resp = await fetch('http://192.168.0.25:3001/action', {
-        method: 'POST',
+      const resp = await fetch("http://192.168.0.25:3001/action", {
+        method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type":"application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(action)
+        body: JSON.stringify(action),
       });
 
       const data = await resp.json();
-      if (data.message.includes('Action succesfully saved')) Alert.alert("Chore succesfully added!");
-    } catch(err) {
+      if (data.message.includes("Action succesfully saved"))
+        Alert.alert("Chore succesfully added!");
+    } catch (err) {
       Alert.alert("Error", err.message);
     }
   }
 
   return (
     <TouchableOpacity style={styles.choreButton2} onPress={handlePress}>
-        <Text style={styles.text}>{title}</Text>
-        <Image
-          source={{uri: 'https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg'}}
-          style={{ width: 20, height: 20, marginLeft: 10 }}
-        />
-        <Text style={{fontFamily: 'PressStart2P_400Regular'}}>{value}</Text>
+      <Text style={styles.text}>{title}</Text>
+      <Image
+        source={{
+          uri: "https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg",
+        }}
+        style={{ width: 20, height: 20, marginLeft: 10 }}
+      />
+      <Text style={{ fontFamily: "PressStart2P_400Regular" }}>{value}</Text>
     </TouchableOpacity>
   );
 }
@@ -65,30 +88,30 @@ function LoginScreen() {
     try {
       const creds = {
         username: email,
-        password: password
+        password: password,
       };
 
-      const response = await fetch('http://192.168.0.25:3001/login', {
-        method: 'POST',
+      const response = await fetch("http://192.168.0.25:3001/login", {
+        method: "POST",
         headers: {
-          "Content-Type":"application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(creds)
+        body: JSON.stringify(creds),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get token');
+        throw new Error("Failed to get token");
       }
 
       const data = await response.json();
       const token = data.token;
 
-      dispatch({type: 'SET_EMAIL', payload: email});
-      dispatch({type: 'SET_PASSWORD', payload: password});
-      dispatch({type: 'SET_TOKEN', payload: token});
+      dispatch({ type: "SET_EMAIL", payload: email });
+      dispatch({ type: "SET_PASSWORD", payload: password });
+      dispatch({ type: "SET_TOKEN", payload: token });
 
       navigation.navigate("Groups");
-    } catch(err) {
+    } catch (err) {
       Alert.alert("Invalid email or password.");
     }
   };
@@ -130,35 +153,37 @@ function RegisterScreen() {
   const [lastName, setLastName] = useState("");
   const navigation = useNavigation();
 
-  async function handleRegister () {
+  async function handleRegister() {
     const user = {
       email,
       password,
       firstName,
-      lastName
-    }
+      lastName,
+    };
 
     // Add new user to MongoDB
     try {
-      const resp = await fetch('http://192.168.0.25:3001/user', {
-        method: 'POST',
+      const resp = await fetch("http://192.168.0.25:3001/user", {
+        method: "POST",
         headers: {
-          "Content-Type":"application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(user),
       });
 
       const data = await resp.json();
-      if (data.message === "User already exists!") Alert.alert("User already exists!");
-      if (data.message.includes('User succesfully created')) Alert.alert(`${firstName} ${lastName} user succesfully created!`);
-    } catch(err) {
+      if (data.message === "User already exists!")
+        Alert.alert("User already exists!");
+      if (data.message.includes("User succesfully created"))
+        Alert.alert(`${firstName} ${lastName} user succesfully created!`);
+    } catch (err) {
       Alert.alert(err.message);
     }
-  };
+  }
 
-  function handleLogin () {
+  function handleLogin() {
     navigation.navigate("Login");
-  };
+  }
 
   return (
     <View style={styles.login.container}>
@@ -197,28 +222,31 @@ function RegisterScreen() {
   );
 }
 
-function TasksScreen () {
+function TasksScreen() {
   const [chores, setChores] = useState([]);
   const isFocused = useIsFocused();
-  const token = useSelector(state => state.token);
+  const token = useSelector((state) => state.token);
 
   useEffect(() => {
-    getChores('http://192.168.0.25:3001/chores', token).then(choreList => setChores(choreList));
+    getChores("http://192.168.0.25:3001/chores", token).then((choreList) =>
+      setChores(choreList)
+    );
   }, [isFocused, token]);
 
-  async function getChores (url, token) {
+  async function getChores(url, token) {
     try {
       const response = await fetch(url, {
         headers: {
-          "Authorization": `Bearer ${token}`
-      }});
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to get chores');
+        throw new Error("Failed to get chores");
       }
 
       let chores = await response.json();
-      chores = JSON.parse(chores.message)
+      chores = JSON.parse(chores.message);
       return chores;
     } catch (err) {
       throw new Error(err);
@@ -228,42 +256,44 @@ function TasksScreen () {
   return (
     <ScrollView style={styles.container}>
       <View id="chores-list" style={styles.choresList}>
-      {chores.map((chore, index) => (
-        <ChoreButton key={index} title={chore.name} value={chore.value}/>
-      ))}
+        {chores.map((chore, index) => (
+          <ChoreButton key={index} title={chore.name} value={chore.value} />
+        ))}
       </View>
     </ScrollView>
   );
 }
 
-function NewTaskScreen () {
+function NewTaskScreen() {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskValue, setTaskValue] = useState("");
-  const token = useSelector(state => state.token);
+  const token = useSelector((state) => state.token);
 
-  async function handlePress () {
+  async function handlePress() {
     const task = {
       name: taskName,
       description: taskDescription,
-      value: taskValue
-    }
+      value: taskValue,
+    };
 
     // Add new task to MongoDB
     try {
-      const resp = await fetch('http://192.168.0.25:3001/chore', {
-        method: 'POST',
+      const resp = await fetch("http://192.168.0.25:3001/chore", {
+        method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type":"application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(task)
-      })
+        body: JSON.stringify(task),
+      });
 
       const data = await resp.json();
-      if (data.message === 'Chore already exists!') Alert.alert('Chore already exists!');
-      if (data.message.includes('Chore succesfully created')) Alert.alert(`${taskName} task succesfully created!`);
-    } catch(err) {
+      if (data.message === "Chore already exists!")
+        Alert.alert("Chore already exists!");
+      if (data.message.includes("Chore succesfully created"))
+        Alert.alert(`${taskName} task succesfully created!`);
+    } catch (err) {
       Alert.alert("Error", err.message);
     }
   }
@@ -295,32 +325,34 @@ function NewTaskScreen () {
   );
 }
 
-function NewGroupScreen () {
+function NewGroupScreen() {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
-  const token = useSelector(state => state.token);
+  const token = useSelector((state) => state.token);
 
-  async function handlePress () {
+  async function handlePress() {
     const group = {
       name: groupName,
-      description: groupDescription
-    }
+      description: groupDescription,
+    };
 
     // Add new event to MongoDB
     try {
-      const resp = await fetch('http://192.168.0.25:3001/group', {
-        method: 'POST',
+      const resp = await fetch("http://192.168.0.25:3001/group", {
+        method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type":"application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(group)
+        body: JSON.stringify(group),
       });
 
       const data = await resp.json();
-      if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
-      if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
-    } catch(err) {
+      if (data.message === "Group already exists!")
+        Alert.alert("Group already exists!");
+      if (data.message.includes("Group succesfully created"))
+        Alert.alert(`${groupName} group succesfully created!`);
+    } catch (err) {
       Alert.alert("Error", err.message);
     }
   }
@@ -346,36 +378,34 @@ function NewGroupScreen () {
   );
 }
 
-function JoinGroupScreen () {
+function JoinGroupScreen() {
   const [groupName, setGroupName] = useState("");
-  const token = useSelector(state => state.token);
+  const token = useSelector((state) => state.token);
 
-  async function handlePress () {
-    
+  async function handlePress() {
     // Add user to group in MongoDB
     try {
       const resp = await fetch(`http://192.168.0.25:3001/group/member`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type":"application/json"
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({'name': groupName})
+        body: JSON.stringify({ name: groupName }),
       });
 
       const data = await resp.json();
 
-      if (data.message === 'Group does not exist!') {
+      if (data.message === "Group does not exist!") {
         Alert.alert("Error: Group does not exist!");
-      } else if (data.message === 'User already in group!') {
+      } else if (data.message === "User already in group!") {
         Alert.alert("Error: User already in group!");
-      } else if (data.message.includes('succesfully added to Group')) {
+      } else if (data.message.includes("succesfully added to Group")) {
         Alert.alert("User added to the group!");
       } else {
         throw new Error(data.message);
       }
-
-    } catch(err) {
+    } catch (err) {
       Alert.alert("Error", err.message);
     }
   }
@@ -395,183 +425,194 @@ function JoinGroupScreen () {
   );
 }
 
-function LeaderboardScreen () {
-  const token = useSelector(state => state.token);
-  const group = useSelector(state => state.group);
-  let [users, setUsers] = useState([]);
-  const isFocused = useIsFocused();
-  const navigation = useNavigation();
+// function LeaderboardScreen() {
+//   const token = useSelector((state) => state.token);
+//   const group = useSelector((state) => state.group);
+//   let [users, setUsers] = useState([]);
+//   const isFocused = useIsFocused();
+//   const navigation = useNavigation();
 
-  useEffect(() => {
-    getUsers(token).then(usersList => setUsers(usersList));
-  }, [isFocused, token]);
+//   useEffect(() => {
+//     getUsers(token).then((usersList) => setUsers(usersList));
+//   }, [isFocused, token]);
 
-  async function getUsers (token) {
-    let usersData;
-    let actions;
+//   async function getUsers(token) {
+//     let usersData;
+//     let actions;
 
-    // We retrieve the users within the group
-    try {
-      const response = await fetch('http://192.168.0.25:3001/users', {
-        headers: {
-          "Authorization": `Bearer ${token}`
-      }});
+//     // We retrieve the users within the group
+//     try {
+//       const response = await fetch("http://192.168.0.25:3001/users", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
 
-      usersData = await response.json();
-      usersData = JSON.parse(usersData.message);
-      usersData = usersData.filter(user => group.members.includes(user._id));
-    } catch (err) {
-      throw new Error(err.message);
-    }
+//       usersData = await response.json();
+//       usersData = JSON.parse(usersData.message);
+//       usersData = usersData.filter((user) => group.members.includes(user._id));
+//     } catch (err) {
+//       throw new Error(err.message);
+//     }
 
-    // We retrieve actions within the group
-    try {
-      const response = await fetch('http://192.168.0.25:3001/actions', {
-        headers: {
-          "Authorization": `Bearer ${token}`
-      }});
+//     // We retrieve actions within the group
+//     try {
+//       const response = await fetch("http://192.168.0.25:3001/actions", {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
 
-      actions = await response.json();
-      actions = JSON.parse(actions.message);
-      actions = actions.filter(action => group._id === action.group);
-    } catch (err) {
-      throw new Error(err.message);
-    }
+//       actions = await response.json();
+//       actions = JSON.parse(actions.message);
+//       actions = actions.filter((action) => group._id === action.group);
+//     } catch (err) {
+//       throw new Error(err.message);
+//     }
 
-    // We calculate the score for each user
-    for (let i = 0; i < usersData.length; i++) {
-      userActions = actions.filter(action => action.user === usersData[i]._id);
-      let score = 0;
+//     // We calculate the score for each user
+//     for (let i = 0; i < usersData.length; i++) {
+//       userActions = actions.filter(
+//         (action) => action.user === usersData[i]._id
+//       );
+//       let score = 0;
 
-      if (userActions.length > 0) {
-        for (let j = 0; j < userActions.length; j++) {
-          score += userActions[j].value;
-        }
-      }
+//       if (userActions.length > 0) {
+//         for (let j = 0; j < userActions.length; j++) {
+//           score += userActions[j].value;
+//         }
+//       }
 
-      usersData[i].score = score;
-    }
+//       usersData[i].score = score;
+//     }
 
-    // We order the users arr of objects by the score
-    usersData.sort((a, b) => b.score - a.score);
+//     // We order the users arr of objects by the score
+//     usersData.sort((a, b) => b.score - a.score);
 
-    return usersData;
-  }
+//     return usersData;
+//   }
 
-  const handleAddTask = () => {
-    navigation.navigate("Tasks");
-  };
+//   const handleAddTask = () => {
+//     navigation.navigate("Tasks");
+//   };
 
-  const handleNewTask = () => {
-    navigation.navigate("New Task");
-  };
+//   const handleNewTask = () => {
+//     navigation.navigate("New Task");
+//   };
 
-  return (
-    <>
-    <View style={styles.leaderBoardScreen.container}>
-    {users.map((user, index) => (
-      <View key={user._id} style={styles.leaderBoardScreen.row}>
-        <Text style={[styles.leaderBoardScreen.name, { color: index === 0 ? '#FFD700' : '#FFFFFF' }]}>
-          {user.firstName}
-        </Text>
-        <Text style={styles.leaderBoardScreen.score}>Score: </Text>
-        <Text style={styles.leaderBoardScreen.score}>{user.score}</Text>
-      </View>
-    ))}
-    </View>
-    <View style={styles.aux}>
-        <TouchableOpacity
-          style={styles.login.button2}
-          onPress={() => handleAddTask()}
-        >
-          <Text style={styles.login.buttonText2}>ADD TASK</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.login.button2}
-          onPress={() => handleNewTask()}
-        >
-          <Text style={styles.login.buttonText2}>NEW TASK</Text>
-        </TouchableOpacity>
-    </View>
-    </>
+//   return (
+//     <>
+//       <View style={styles.leaderBoardScreen.container}>
+//         {users.map((user, index) => (
+//           <View key={user._id} style={styles.leaderBoardScreen.row}>
+//             <Text
+//               style={[
+//                 styles.leaderBoardScreen.name,
+//                 { color: index === 0 ? "#FFD700" : "#FFFFFF" },
+//               ]}
+//             >
+//               {user.firstName}
+//             </Text>
+//             <Text style={styles.leaderBoardScreen.score}>Score: </Text>
+//             <Text style={styles.leaderBoardScreen.score}>{user.score}</Text>
+//           </View>
+//         ))}
+//       </View>
+//       <View style={styles.aux}>
+//         <TouchableOpacity
+//           style={styles.login.button2}
+//           onPress={() => handleAddTask()}
+//         >
+//           <Text style={styles.login.buttonText2}>ADD TASK</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={styles.login.button2}
+//           onPress={() => handleNewTask()}
+//         >
+//           <Text style={styles.login.buttonText2}>NEW TASK</Text>
+//         </TouchableOpacity>
+//       </View>
+//     </>
+//   );
+// }
 
-  );
-}
+// function GroupsScreen() {
+//   const [groups, setGroups] = useState([]);
+//   const isFocused = useIsFocused();
+//   const token = useSelector((state) => state.token);
+//   const dispatch = useDispatch();
+//   const navigation = useNavigation();
 
-function GroupsScreen () {
-  const [groups, setGroups] = useState([]);
-  const isFocused = useIsFocused();
-  const token = useSelector(state => state.token);
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
+//   useEffect(() => {
+//     getGroups("http://192.168.0.25:3001/groups", token).then((groupList) =>
+//       setGroups(groupList)
+//     );
+//   }, [isFocused, token]);
 
-  useEffect(() => {
-    getGroups('http://192.168.0.25:3001/groups', token).then(groupList => setGroups(groupList));
-  }, [isFocused, token]);
+//   async function getGroups(url, token) {
+//     try {
+//       const response = await fetch(url, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
 
-  async function getGroups (url, token) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          "Authorization": `Bearer ${token}`
-      }});
+//       let groups = await response.json();
+//       groups = JSON.parse(groups.message);
+//       return groups;
+//     } catch (err) {
+//       throw new Error(err);
+//     }
+//   }
 
-      let groups = await response.json();
-      groups = JSON.parse(groups.message);
-      return groups;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
+//   function onPress(group) {
+//     dispatch({ type: "SET_GROUP", payload: group });
+//     navigation.navigate("Leaderboard");
+//   }
 
-  function onPress (group) {
-    dispatch({type: 'SET_GROUP', payload: group});
-    navigation.navigate("Leaderboard");
-  }
+//   const handleNewGroup = () => {
+//     navigation.navigate("New Group");
+//   };
 
-  const handleNewGroup = () => {
-    navigation.navigate("New Group");
-  };
+//   const handleJoinGroup = () => {
+//     navigation.navigate("Join Group");
+//   };
 
-  const handleJoinGroup = () => {
-    navigation.navigate("Join Group");
-  };
-
-  return (
-    <>
-    <View style={styles.groupsScreen.container}>
-      {groups.map((group) => (
-        <TouchableOpacity
-          key={group._id}
-          style={styles.groupsScreen.groupContainer}
-          onPress={() => onPress(group)}
-        >
-          <Text style={styles.groupsScreen.groupTitle}>{group.name}</Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-    <View style={styles.aux}>
-        <TouchableOpacity
-          style={styles.login.button2}
-          onPress={() => handleJoinGroup()}
-        >
-          <Text style={styles.login.buttonText2}>JOIN GROUP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.login.button2}
-          onPress={() => handleNewGroup()}
-        >
-          <Text style={styles.login.buttonText2}>CREATE GROUP</Text>
-        </TouchableOpacity>
-    </View>
-    </>
-  );
-}
+//   return (
+//     <>
+//       <View style={styles.groupsScreen.container}>
+//         {groups.map((group) => (
+//           <TouchableOpacity
+//             key={group._id}
+//             style={styles.groupsScreen.groupContainer}
+//             onPress={() => onPress(group)}
+//           >
+//             <Text style={styles.groupsScreen.groupTitle}>{group.name}</Text>
+//           </TouchableOpacity>
+//         ))}
+//       </View>
+//       <View style={styles.aux}>
+//         <TouchableOpacity
+//           style={styles.login.button2}
+//           onPress={() => handleJoinGroup()}
+//         >
+//           <Text style={styles.login.buttonText2}>JOIN GROUP</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={styles.login.button2}
+//           onPress={() => handleNewGroup()}
+//         >
+//           <Text style={styles.login.buttonText2}>CREATE GROUP</Text>
+//         </TouchableOpacity>
+//       </View>
+//     </>
+//   );
+// }
 
 export default function App() {
   const Stack = createStackNavigator();
   const [fontsLoaded] = useFonts({
-    PressStart2P_400Regular
+    PressStart2P_400Regular,
   });
 
   if (!fontsLoaded) {
@@ -586,15 +627,15 @@ export default function App() {
             name="Login"
             component={LoginScreen}
             options={{
-              title: 'THE CHORES',
+              title: "THE CHORES",
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
@@ -602,115 +643,115 @@ export default function App() {
             name="Register"
             component={RegisterScreen}
             options={{
-              title: 'NEW USER',
+              title: "NEW USER",
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
           <Stack.Screen
-            name="Tasks" 
-            component={TasksScreen} 
+            name="Tasks"
+            component={TasksScreen}
             options={{
-              title: 'CHORES',
+              title: "CHORES",
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
           <Stack.Screen
-            name='New Task'
+            name="New Task"
             component={NewTaskScreen}
             options={{
-              title: 'NEW TASK',
+              title: "NEW TASK",
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular',
-                textAlign: 'center'
-              },
-            }}
-          />
-          <Stack.Screen 
-            name='Leaderboard'
-            component={LeaderboardScreen}
-            options={{
-              title: 'LEADERBOARD',
-              headerStyle: {
-                backgroundColor: '#f77b4d'
-              },
-              headerTintColor: '#fff',
-              headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
+                textAlign: "center",
               },
             }}
           />
           <Stack.Screen
-            name='Groups'
+            name="Leaderboard"
+            component={Leaderboard}
+            options={{
+              title: "LEADERBOARD",
+              headerStyle: {
+                backgroundColor: "#f77b4d",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Groups"
             component={GroupsScreen}
             options={{
-              title: 'YOUR GROUPS',
+              title: "YOUR GROUPS",
               headerLeft: null, // Remove the back button
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
           <Stack.Screen
-            name='New Group'
+            name="New Group"
             component={NewGroupScreen}
             options={{
-              title: 'NEW GROUP',
+              title: "NEW GROUP",
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
           <Stack.Screen
-            name='Join Group'
+            name="Join Group"
             component={JoinGroupScreen}
             options={{
-              title: 'JOIN GROUP',
+              title: "JOIN GROUP",
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: "#f77b4d",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontWeight: "bold",
+                fontFamily: "PressStart2P_400Regular",
               },
             }}
           />
         </Stack.Navigator>
-        <StatusBar style="light" backgroundColor="blue"/>
+        <StatusBar style="light" backgroundColor="blue" />
       </NavigationContainer>
     </Provider>
   );
@@ -719,186 +760,186 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#303030'
+    backgroundColor: "#303030",
   },
   choresList: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
-    width: '70%',
-    textAlign: 'left',
-    fontFamily: 'PressStart2P_400Regular',
+    width: "70%",
+    textAlign: "left",
+    fontFamily: "PressStart2P_400Regular",
     fontSize: 12,
-    color: '#303030', // white color
+    color: "#303030", // white color
   },
   choreButton: {
     flex: 1,
-    width: '15%',
-    backgroundColor: '#f3b78c',
+    width: "15%",
+    backgroundColor: "#f3b78c",
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
     marginHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 2,
-    borderColor: '#000',
-    fontFamily: 'PressStart2P_400Regular',
+    borderColor: "#000",
+    fontFamily: "PressStart2P_400Regular",
     fontSize: 16,
-    color: '#000',
-    textTransform: 'uppercase',
+    color: "#000",
+    textTransform: "uppercase",
   },
   choreButton2: {
     flex: 1,
-    width: '80%',
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    width: "80%",
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
     marginHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    alignItems: "center",
+    justifyContent: "space-evenly",
     borderWidth: 2,
-    borderColor: '#000',
-    fontFamily: 'PressStart2P_400Regular',
+    borderColor: "#000",
+    fontFamily: "PressStart2P_400Regular",
     fontSize: 16,
-    color: '#000',
-    textTransform: 'uppercase',
+    color: "#000",
+    textTransform: "uppercase",
   },
   login: {
     container: {
       flex: 1,
-      backgroundColor: '#303030',
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: "#303030",
+      justifyContent: "center",
+      alignItems: "center",
     },
     input: {
-      width: '80%',
+      width: "80%",
       padding: 10,
       borderWidth: 1,
-      borderColor: '#ccc',
-      backgroundColor: '#eee',
+      borderColor: "#ccc",
+      backgroundColor: "#eee",
       borderRadius: 5,
       marginBottom: 10,
       fontSize: 18,
-      fontFamily: 'PressStart2P_400Regular',
-      textAlign: 'center',
+      fontFamily: "PressStart2P_400Regular",
+      textAlign: "center",
     },
     button: {
-      backgroundColor: '#fff',
+      backgroundColor: "#fff",
       borderRadius: 10,
       padding: 10,
       marginVertical: 10,
       marginHorizontal: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderWidth: 2,
-      borderColor: '#000',
-      fontFamily: 'PressStart2P_400Regular',
+      borderColor: "#000",
+      fontFamily: "PressStart2P_400Regular",
       fontSize: 16,
-      color: '#000',
-      textTransform: 'uppercase',
+      color: "#000",
+      textTransform: "uppercase",
     },
     button2: {
-      backgroundColor: '#f3b78c',
+      backgroundColor: "#f3b78c",
       borderRadius: 10,
       padding: 10,
       marginVertical: 10,
       marginHorizontal: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
       borderWidth: 2,
-      borderColor: '#000',
-      fontFamily: 'PressStart2P_400Regular',
+      borderColor: "#000",
+      fontFamily: "PressStart2P_400Regular",
       fontSize: 16,
-      color: '#000',
-      textTransform: 'uppercase',
+      color: "#000",
+      textTransform: "uppercase",
     },
 
     buttonText: {
-      color: '#ccc',
+      color: "#ccc",
       fontSize: 20,
-      fontFamily: 'PressStart2P_400Regular',
-      textAlign: 'center',
+      fontFamily: "PressStart2P_400Regular",
+      textAlign: "center",
     },
     buttonText2: {
-      color: '#303030',
+      color: "#303030",
       fontSize: 20,
-      fontFamily: 'PressStart2P_400Regular',
-      textAlign: 'center',
-    }
+      fontFamily: "PressStart2P_400Regular",
+      textAlign: "center",
+    },
   },
   leaderBoardScreen: {
     container: {
       flex: 1,
-      backgroundColor: '#303030',
+      backgroundColor: "#303030",
       padding: 20,
     },
     title: {
       fontSize: 24,
-      fontWeight: 'bold',
-      color: '#FFFFFF',
+      fontWeight: "bold",
+      color: "#FFFFFF",
       marginBottom: 10,
-      fontFamily: 'PressStart2P_400Regular',
-      textTransform: 'uppercase',
+      fontFamily: "PressStart2P_400Regular",
+      textTransform: "uppercase",
       letterSpacing: 2,
-      textAlign: 'center',
+      textAlign: "center",
     },
     row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
       marginBottom: 10,
     },
     name: {
-      width: '53%',
+      width: "53%",
       fontSize: 18,
-      fontWeight: 'bold',
-      fontFamily: 'PressStart2P_400Regular',
+      fontWeight: "bold",
+      fontFamily: "PressStart2P_400Regular",
     },
     score: {
-      width: '40%',
+      width: "40%",
       fontSize: 18,
-      color: '#FFD700',
-      fontWeight: 'bold',
-      fontFamily: 'PressStart2P_400Regular',
-    }
+      color: "#FFD700",
+      fontWeight: "bold",
+      fontFamily: "PressStart2P_400Regular",
+    },
   },
   groupsScreen: {
     container: {
       flex: 1,
-      backgroundColor: '#303030',
+      backgroundColor: "#303030",
       padding: 20,
-      fontFamily: 'PressStart2P_400Regular',
+      fontFamily: "PressStart2P_400Regular",
     },
     title: {
-      color: '#FFF',
+      color: "#FFF",
       fontSize: 24,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       marginBottom: 20,
-      fontFamily: 'PressStart2P_400Regular',
+      fontFamily: "PressStart2P_400Regular",
     },
     groupContainer: {
-      backgroundColor: '#FFF',
+      backgroundColor: "#FFF",
       borderRadius: 8,
       marginBottom: 20,
       paddingVertical: 16,
       paddingHorizontal: 16,
-      fontFamily: 'PressStart2P_400Regular',
+      fontFamily: "PressStart2P_400Regular",
     },
     groupTitle: {
-      color: '#000',
+      color: "#000",
       fontSize: 18,
-      fontWeight: 'bold',
-      fontFamily: 'PressStart2P_400Regular',
+      fontWeight: "bold",
+      fontFamily: "PressStart2P_400Regular",
     },
   },
   aux: {
-    backgroundColor: '#303030',
+    backgroundColor: "#303030",
     padding: 20,
-    fontFamily: 'PressStart2P_400Regular',
-  }
+    fontFamily: "PressStart2P_400Regular",
+  },
 });
