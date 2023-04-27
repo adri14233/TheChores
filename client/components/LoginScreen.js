@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+import {
+  TextInput,
+  Text,
+  View,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
+import { handleRegister } from "./Navigation";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -9,6 +17,7 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
+    console.log("clicked");
     try {
       const creds = {
         username: email,
@@ -40,10 +49,6 @@ export default function LoginScreen() {
     }
   };
 
-  const handleRegister = () => {
-    navigation.navigate("Register");
-  };
-
   return (
     <View style={styles.login.container}>
       <TextInput
@@ -59,7 +64,13 @@ export default function LoginScreen() {
         secureTextEntry
         style={styles.login.input}
       />
-      <TouchableOpacity style={styles.login.button} onPress={handleLogin}>
+      <TouchableOpacity
+        style={styles.login.button}
+        onPress={() => {
+          handleLogin();
+          alert("hello");
+        }}
+      >
         <Text style={styles.login.buttonText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.login.button} onPress={handleRegister}>
