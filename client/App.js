@@ -5,7 +5,6 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   Alert,
   Image,
 } from "react-native";
@@ -16,12 +15,11 @@ import {
 } from "@expo-google-fonts/press-start-2p";
 import {
   NavigationContainer,
-  useNavigation,
   useIsFocused,
 } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Provider } from "react-redux";
 import { legacy_createStore } from "redux";
 import loginReducer from "./reducer";
@@ -33,6 +31,7 @@ import Leaderboard from "./components/Leaderboard";
 import GroupsScreen from "./components/GroupsScreen";
 import RegisterScreen from "./components/RegisterScreen";
 import NewGroupScreen from "./components/NewGroupScreen";
+import NewTaskScreen from "./components/NewTaskScreen";
 
 function ChoreButton({ title, value = 0 }) {
   const token = useSelector((state) => state.token);
@@ -80,150 +79,6 @@ function ChoreButton({ title, value = 0 }) {
   );
 }
 
-// function LoginScreen() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const dispatch = useDispatch();
-//   const navigation = useNavigation();
-
-//   const handleLogin = async () => {
-//     try {
-//       const creds = {
-//         username: email,
-//         password: password,
-//       };
-
-//       const response = await fetch("http://192.168.0.25:3001/login", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(creds),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error("Failed to get token");
-//       }
-
-//       const data = await response.json();
-//       const token = data.token;
-
-//       dispatch({ type: "SET_EMAIL", payload: email });
-//       dispatch({ type: "SET_PASSWORD", payload: password });
-//       dispatch({ type: "SET_TOKEN", payload: token });
-
-//       navigation.navigate("Groups");
-//     } catch (err) {
-//       Alert.alert("Invalid email or password.");
-//     }
-//   };
-
-//   const handleRegister = () => {
-//     navigation.navigate("Register");
-//   };
-
-//   return (
-//     <View style={styles.login.container}>
-//       <TextInput
-//         placeholder="Email"
-//         value={email}
-//         onChangeText={(text) => setEmail(text)}
-//         style={styles.login.input}
-//       />
-//       <TextInput
-//         placeholder="Password"
-//         value={password}
-//         onChangeText={(text) => setPassword(text)}
-//         secureTextEntry
-//         style={styles.login.input}
-//       />
-//       <TouchableOpacity style={styles.login.button} onPress={handleLogin}>
-//         <Text style={styles.login.buttonText}>LOGIN</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={styles.login.button} onPress={handleRegister}>
-//         <Text style={styles.login.buttonText}>REGISTER</Text>
-//       </TouchableOpacity>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// function RegisterScreen() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [firstName, setFirstName] = useState("");
-//   const [lastName, setLastName] = useState("");
-//   const navigation = useNavigation();
-
-//   async function handleRegister() {
-//     const user = {
-//       email,
-//       password,
-//       firstName,
-//       lastName,
-//     };
-
-//     // Add new user to MongoDB
-//     try {
-//       const resp = await fetch("http://192.168.0.25:3001/user", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(user),
-//       });
-
-//       const data = await resp.json();
-//       if (data.message === "User already exists!")
-//         Alert.alert("User already exists!");
-//       if (data.message.includes("User succesfully created"))
-//         Alert.alert(`${firstName} ${lastName} user succesfully created!`);
-//     } catch (err) {
-//       Alert.alert(err.message);
-//     }
-//   }
-
-//   function handleLogin() {
-//     navigation.navigate("Login");
-//   }
-
-//   return (
-//     <View style={styles.login.container}>
-//       <TextInput
-//         placeholder="Email"
-//         value={email}
-//         onChangeText={(text) => setEmail(text)}
-//         style={styles.login.input}
-//       />
-//       <TextInput
-//         placeholder="Password"
-//         value={password}
-//         onChangeText={(text) => setPassword(text)}
-//         secureTextEntry
-//         style={styles.login.input}
-//       />
-//       <TextInput
-//         placeholder="First Name"
-//         value={firstName}
-//         onChangeText={(text) => setFirstName(text)}
-//         style={styles.login.input}
-//       />
-//       <TextInput
-//         placeholder="Last Name"
-//         value={lastName}
-//         onChangeText={(text) => setLastName(text)}
-//         style={styles.login.input}
-//       />
-//       <TouchableOpacity style={styles.login.button} onPress={handleRegister}>
-//         <Text style={styles.login.buttonText}>REGISTER</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={styles.login.button} onPress={handleLogin}>
-//         <Text style={styles.login.buttonText}>LOGIN</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
-
 function TasksScreen() {
   const [chores, setChores] = useState([]);
   const isFocused = useIsFocused();
@@ -266,69 +121,6 @@ function TasksScreen() {
   );
 }
 
-function NewTaskScreen() {
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
-  const [taskValue, setTaskValue] = useState("");
-  const token = useSelector((state) => state.token);
-
-  async function handlePress() {
-    const task = {
-      name: taskName,
-      description: taskDescription,
-      value: taskValue,
-    };
-
-    // Add new task to MongoDB
-    try {
-      const resp = await fetch("http://192.168.0.25:3001/chore", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-
-      const data = await resp.json();
-      if (data.message === "Chore already exists!")
-        Alert.alert("Chore already exists!");
-      if (data.message.includes("Chore succesfully created"))
-        Alert.alert(`${taskName} task succesfully created!`);
-    } catch (err) {
-      Alert.alert("Error", err.message);
-    }
-  }
-
-  return (
-    <View style={styles.login.container}>
-      <TextInput
-        placeholder="Task Name"
-        value={taskName}
-        onChangeText={(text) => setTaskName(text)}
-        style={styles.login.input}
-      />
-      <TextInput
-        placeholder="Description"
-        value={taskDescription}
-        onChangeText={(text) => setTaskDescription(text)}
-        style={styles.login.input}
-      />
-      <TextInput
-        placeholder="Value points of this task"
-        value={taskValue}
-        onChangeText={(text) => setTaskValue(text)}
-        style={styles.login.input}
-      />
-      <TouchableOpacity style={styles.login.button} onPress={handlePress}>
-        <Text style={styles.login.buttonText}>Create Task</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-
-
 
 
 
@@ -341,6 +133,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+  console.log("first render")
 
   return (
     <Provider store={store}>

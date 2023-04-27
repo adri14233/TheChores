@@ -1,9 +1,10 @@
+import { View, TouchableOpacity, Text } from "react-native";
+import { onPress, handleNewGroup, handleJoinGroup } from "./Navigation";
+
 export default function GroupsScreen() {
   const [groups, setGroups] = useState([]);
   const isFocused = useIsFocused();
   const token = useSelector((state) => state.token);
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   useEffect(() => {
     getGroups("http://192.168.0.25:3001/groups", token).then((groupList) =>
@@ -12,6 +13,7 @@ export default function GroupsScreen() {
   }, [isFocused, token]);
 
   async function getGroups(url, token) {
+  
     try {
       const response = await fetch(url, {
         headers: {
@@ -26,19 +28,6 @@ export default function GroupsScreen() {
       throw new Error(err);
     }
   }
-
-  function onPress(group) {
-    dispatch({ type: "SET_GROUP", payload: group });
-    navigation.navigate("Leaderboard");
-  }
-
-  const handleNewGroup = () => {
-    navigation.navigate("New Group");
-  };
-
-  const handleJoinGroup = () => {
-    navigation.navigate("Join Group");
-  };
 
   return (
     <>

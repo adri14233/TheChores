@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-
+import { handleLogin } from "./Navigation";
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,9 +36,6 @@ export default function RegisterScreen() {
     }
   }
 
-  function handleLogin() {
-    navigation.navigate("Login");
-  }
 
   return (
     <View style={styles.login.container}>
