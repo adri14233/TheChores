@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { handleLogin } from "./Navigation";
+import styles from "../App";
 export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const navigation = useNavigation();
 
   async function handleRegister() {
     const user = {
@@ -35,7 +34,6 @@ export default function RegisterScreen() {
       Alert.alert(err.message);
     }
   }
-
 
   return (
     <View style={styles.login.container}>

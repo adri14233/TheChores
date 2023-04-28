@@ -13,10 +13,7 @@ import {
   useFonts,
   PressStart2P_400Regular,
 } from "@expo-google-fonts/press-start-2p";
-import {
-  NavigationContainer,
-  useIsFocused,
-} from "@react-navigation/native";
+import { NavigationContainer, useIsFocused } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { useSelector } from "react-redux";
@@ -32,6 +29,8 @@ import GroupsScreen from "./components/GroupsScreen";
 import RegisterScreen from "./components/RegisterScreen";
 import NewGroupScreen from "./components/NewGroupScreen";
 import NewTaskScreen from "./components/NewTaskScreen";
+import JoinGroupScreen from "./components/JoinGroup";
+import LoginScreen from "./components/LoginScreen";
 
 function ChoreButton({ title, value = 0 }) {
   const token = useSelector((state) => state.token);
@@ -121,9 +120,6 @@ function TasksScreen() {
   );
 }
 
-
-
-
 export default function App() {
   const Stack = createStackNavigator();
   const [fontsLoaded] = useFonts({
@@ -133,7 +129,6 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  console.log("first render")
 
   return (
     <Provider store={store}>

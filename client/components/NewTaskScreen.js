@@ -1,4 +1,5 @@
 import { TextInput, View, TouchableOpacity, Text } from "react-native";
+import styles from "../App";
 
 export default function NewTaskScreen() {
   const [taskName, setTaskName] = useState("");

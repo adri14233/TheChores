@@ -1,4 +1,5 @@
 import { View, TextInput, TouchableOpacity } from "react-native";
+import styles from "../App";
 export default function NewGroupScreen() {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");

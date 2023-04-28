@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { handleAddTask, handleNewTask } from "./Navigation";
+import styles from '../App'
 
 export default function LeaderboardScreen() {
   const token = useSelector((state) => state.token);

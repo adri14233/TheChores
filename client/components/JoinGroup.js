@@ -1,4 +1,6 @@
-function JoinGroupScreen() {
+import styles from '../App'
+
+export default function JoinGroupScreen() {
   const [groupName, setGroupName] = useState("");
   const token = useSelector((state) => state.token);
 

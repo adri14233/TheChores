@@ -1,5 +1,6 @@
 import { View, TouchableOpacity, Text } from "react-native";
 import { onPress, handleNewGroup, handleJoinGroup } from "./Navigation";
+import styles from '../App'
 
 export default function GroupsScreen() {
   const [groups, setGroups] = useState([]);

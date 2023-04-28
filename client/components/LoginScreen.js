@@ -9,6 +9,9 @@ import {
   StatusBar,
 } from "react-native";
 import { handleRegister } from "./Navigation";
+import styles from '../App'
+import { getLogin } from "./APIService";
+
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -17,37 +20,39 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    console.log("clicked");
-    try {
+   
+
       const creds = {
         username: email,
         password: password,
       };
 
-      const response = await fetch("http://192.168.0.25:3001/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(creds),
-      });
+      getLogin(creds)
 
-      if (!response.ok) {
-        throw new Error("Failed to get token");
-      }
+    //   const response = await fetch("http://192.168.0.25:3001/login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(creds),
+    //   });
 
-      const data = await response.json();
-      const token = data.token;
+    //   if (!response.ok) {
+    //     throw new Error("Failed to get token");
+    //   }
 
-      dispatch({ type: "SET_EMAIL", payload: email });
-      dispatch({ type: "SET_PASSWORD", payload: password });
-      dispatch({ type: "SET_TOKEN", payload: token });
+    //   const data = await response.json();
+    //   const token = data.token;
 
-      navigation.navigate("Groups");
-    } catch (err) {
-      Alert.alert("Invalid email or password.");
-    }
-  };
+    //   dispatch({ type: "SET_EMAIL", payload: email });
+    //   dispatch({ type: "SET_PASSWORD", payload: password });
+    //   dispatch({ type: "SET_TOKEN", payload: token });
+
+    //   navigation.navigate("Groups");
+    // } catch (err) {
+    //   Alert.alert("Invalid email or password.");
+    // }
+  }
 
   return (
     <View style={styles.login.container}>

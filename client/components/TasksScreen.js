@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native/lib/typescript/src";
 import { useSelector } from "react-redux";
+import styles from "../App";
+import { View, ScrollView } from "react-native";
+import { useIsFocused } from "@react-navigation/native/lib/typescript/src";
 
 export default function TasksScreen() {
   const [chores, setChores] = useState([]);
