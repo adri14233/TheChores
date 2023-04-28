@@ -9,7 +9,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-.env
+new tasksSECURE.js
 # macOS
 .DS_Store
 

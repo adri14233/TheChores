@@ -1,4 +1,4 @@
-import { MY_URL } from "./SECURE";
+import { MY_URL } from "../SECURE";
 const ROOT_URL = MY_URL
 import { Alert } from "react-native";
 
