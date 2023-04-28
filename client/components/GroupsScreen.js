@@ -8,27 +8,27 @@ export default function GroupsScreen() {
   const token = useSelector((state) => state.token);
 
   useEffect(() => {
-    getGroups("http://192.168.0.25:3001/groups", token).then((groupList) =>
+    getGroups(token).then((groupList) =>
       setGroups(groupList)
     );
   }, [isFocused, token]);
 
-  async function getGroups(url, token) {
+  // async function getGroups(url, token) {
   
-    try {
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //   try {
+  //     const response = await fetch(url, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      let groups = await response.json();
-      groups = JSON.parse(groups.message);
-      return groups;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
+  //     let groups = await response.json();
+  //     groups = JSON.parse(groups.message);
+  //     return groups;
+  //   } catch (err) {
+  //     throw new Error(err);
+  //   }
+  // }
 
   return (
     <>

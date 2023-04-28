@@ -1,4 +1,5 @@
 import styles from '../App'
+import { postUserToGroup } from './APIService';
 
 export default function JoinGroupScreen() {
   const [groupName, setGroupName] = useState("");
@@ -6,17 +7,8 @@ export default function JoinGroupScreen() {
 
   async function handlePress() {
     // Add user to group in MongoDB
-    try {
-      const resp = await fetch(`http://192.168.0.25:3001/group/member`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: groupName }),
-      });
 
-      const data = await resp.json();
+    const data = postUserToGroup(groupName, token)
 
       if (data.message === "Group does not exist!") {
         Alert.alert("Error: Group does not exist!");
@@ -27,9 +19,7 @@ export default function JoinGroupScreen() {
       } else {
         throw new Error(data.message);
       }
-    } catch (err) {
-      Alert.alert("Error", err.message);
-    }
+
   }
 
   return (

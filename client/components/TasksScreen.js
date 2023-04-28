@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import styles from "../App";
 import { View, ScrollView } from "react-native";
 import { useIsFocused } from "@react-navigation/native/lib/typescript/src";
+import { getChores } from "./APIService";
 
 export default function TasksScreen() {
   const [chores, setChores] = useState([]);
@@ -11,30 +12,29 @@ export default function TasksScreen() {
   const token = useSelector((state) => state.token);
 
   useEffect(() => {
-    getChores("http://192.168.0.25:3001/chores", token).then((choreList) =>
+    getChores(token).then((choreList) =>
       setChores(choreList)
     );
   }, [isFocused, token]);
 
-  async function getChores(url, token) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // async function getChores(token) {
+    // try {
+    //   const response = await fetch(url, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   })
+    //   if (!response.ok) {
+    //     throw new Error("Failed to get chores");
+    //   }
 
-      if (!response.ok) {
-        throw new Error("Failed to get chores");
-      }
-
-      let chores = await response.json();
-      chores = JSON.parse(chores.message);
-      return chores;
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
+    //   // let chores = await response.json();
+    //   return response = JSON.parse(response.message);
+    //   // return chores;
+    // } catch (err) {
+    //   throw new Error(err);
+    // }
+  // }
 
   return (
     <ScrollView style={styles.container}>

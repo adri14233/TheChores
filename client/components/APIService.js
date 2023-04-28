@@ -41,7 +41,7 @@ export async function getActions (token) {
 
 /* LOGIN */
 
-export async function getLogin (credentials) {
+export async function getLogin (creds) {
   try {
     const resp = await fetch((ROOT_URL + '/login'), {
       method: 'POST',
@@ -49,20 +49,14 @@ export async function getLogin (credentials) {
         "Content-Type":"application/json"
       },
       body: JSON.stringify(creds)
-    });
+    }).then((resp)=> resp.json())
 
     if (!response.ok) {
       throw new Error('Failed to get token');
     }
-
-    const data = await response.json();
-    const token = data.token;
-
-    // dispatch({type: 'SET_EMAIL', payload: email});
-    // dispatch({type: 'SET_PASSWORD', payload: password});
-    // dispatch({type: 'SET_TOKEN', payload: token});
-
-    // navigation.navigate("Groups");
+    return resp
+    // const data = await resp.json();
+   
 
   } catch (err) {
     throw new Error(err.message);
@@ -112,18 +106,21 @@ export async function getUsers (token) {
 
 export async function getChores (token) {
   try {
-    const resp = await fetch((ROOT_URL + '/chores'), {
+    const response = await fetch(ROOT_URL + "/chores", {
       headers: {
-        "Authorization": `Bearer ${token}`
-    }});
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => response.json());
+
 
     if (!response.ok) {
       throw new Error('Failed to get chores');
     }
 
-    let chores = await response.json();
-    chores = JSON.parse(chores.message)
-    return chores;
+
+    // let chores = await response.json();
+   return JSON.parse(response.message)  // check if it works!
+    // return chores;
 
   } catch (err) {
     throw new Error(err.message);
@@ -154,16 +151,16 @@ export async function postChore (chore, token) {
 
 export async function postGroup (group, token) {
   try {
-    const resp = await fetch((ROOT_URL + '/group'), {
+    return resp = await fetch((ROOT_URL + '/group'), {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type":"application/json"
       },
       body: JSON.stringify(group)
-    });
+    }).then((resp => resp.json()))
 
-    const data = await resp.json();
+    // const data = await resp.json();
     // if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
     // if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
 
@@ -174,24 +171,16 @@ export async function postGroup (group, token) {
 
 export async function postUserToGroup (groupName, token) {
   try {
-    const resp = await fetch((ROOT_URL + '/group/member'), {
+    return resp = await fetch((ROOT_URL + '/group/member'), {
       method: 'POST',
       headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type":"application/json"
       },
       body: JSON.stringify({'name': groupName})
-    });
+    }).then((resp)=> resp.json())
 
-    // if (data.message === 'Group does not exist!') {
-    //   Alert.alert("Error: Group does not exist!");
-    // } else if (data.message === 'User already in group!') {
-    //   Alert.alert("Error: User already in group!");
-    // } else if (data.message.includes('succesfully added to Group')) {
-    //   Alert.alert("User added to the group!");
-    // } else {
-    //   throw new Error(data.message);
-    // }
+
 
   } catch (err) {
     throw new Error(err.message);
@@ -203,11 +192,11 @@ export async function getGroups (token) {
     const resp = await fecth((ROOT_URL + '/groups'), {
       headers: {
         "Authorization": `Bearer ${token}`
-    }});
+    }}).then((resp) => resp.json())
 
-    let groups = await response.json();
-    groups = JSON.parse(groups.message);
-    return groups;
+  
+  return JSON.parse(resp.message);
+   
 
   } catch (err) {
     throw new Error(err.message);

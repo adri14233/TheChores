@@ -27,7 +27,7 @@ export default function LoginScreen() {
         password: password,
       };
 
-      getLogin(creds)
+      const data = getLogin(creds)
 
     //   const response = await fetch("http://192.168.0.25:3001/login", {
     //     method: "POST",
@@ -42,13 +42,13 @@ export default function LoginScreen() {
     //   }
 
     //   const data = await response.json();
-    //   const token = data.token;
+      const token = data.token;
 
-    //   dispatch({ type: "SET_EMAIL", payload: email });
-    //   dispatch({ type: "SET_PASSWORD", payload: password });
-    //   dispatch({ type: "SET_TOKEN", payload: token });
+      dispatch({ type: "SET_EMAIL", payload: email });
+      dispatch({ type: "SET_PASSWORD", payload: password });
+      dispatch({ type: "SET_TOKEN", payload: token });
 
-    //   navigation.navigate("Groups");
+      navigation.navigate("Groups");
     // } catch (err) {
     //   Alert.alert("Invalid email or password.");
     // }
@@ -78,7 +78,7 @@ export default function LoginScreen() {
       >
         <Text style={styles.login.buttonText}>LOGIN</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.login.button} onPress={handleRegister}>
+      <TouchableOpacity style={styles.login.button} onPress={()=> handleRegister()}>
         <Text style={styles.login.buttonText}>REGISTER</Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
