@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { View, TextInput, TouchableOpacity, Text, StatusBar } from "react-native";
-import {styles} from '../App'
-
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+} from "react-native";
+import { styles } from "../App";
+import { getLogin } from "./APIService";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -12,35 +18,21 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    try {
-      const creds = {
-        username: email,
-        password: password,
-      };
+ 
+    const creds = {
+      username: email,
+      password: password,
+    };
 
-      const response = await fetch("http://192.168.0.25:3001/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(creds),
-      });
+    const data = getLogin(creds);
 
-      if (!response.ok) {
-        throw new Error("Failed to get token");
-      }
+    const token = data.token;
 
-      const data = await response.json();
-      const token = data.token;
+    dispatch({ type: "SET_EMAIL", payload: email });
+    dispatch({ type: "SET_PASSWORD", payload: password });
+    dispatch({ type: "SET_TOKEN", payload: token });
 
-      dispatch({ type: "SET_EMAIL", payload: email });
-      dispatch({ type: "SET_PASSWORD", payload: password });
-      dispatch({ type: "SET_TOKEN", payload: token });
-
-      navigation.navigate("Groups");
-    } catch (err) {
-      Alert.alert("Invalid email or password.");
-    }
+    navigation.navigate("Groups");
   };
 
   const handleRegister = () => {
