@@ -21,14 +21,13 @@ export default function LeaderboardScreen() {
      .then((usersList) => setUsers(usersList));
 }, [isFocused, token]);
 
-const usersData = getUsers(token)
+let usersData = getUsers(token)
   .then((data) => data.filter((user) => group.members.includes(user._id)))
   .then((usersList) => setUsers(usersList));
 
     const userActions = getActions().then(data => data.filter((action)=> group._id === action.group))
 
     getUsers(token).then((usersList) => setUsers(usersList));
-  }, [isFocused, token]);
 
   //   async function getUsers(token) {
   // let usersData;

@@ -20,6 +20,7 @@ import GroupsScreen from './components/GroupsScreen'
 import LeaderboardScreen from './components/LeaderboardScreen'
 import JoinGroupScreen from './components/JoinGroupScreen'
 import TasksScreen from './components/TasksScreen';
+import NewGroupScreen from './components/NewGroupScreen';
 
 
 
@@ -165,57 +166,58 @@ import TasksScreen from './components/TasksScreen';
 //   );
 // }
 
-function NewGroupScreen () {
-  const [groupName, setGroupName] = useState("");
-  const [groupDescription, setGroupDescription] = useState("");
-  const token = useSelector(state => state.token);
+// function NewGroupScreen () {
+//   const [groupName, setGroupName] = useState("");
+//   const [groupDescription, setGroupDescription] = useState("");
+//   const token = useSelector(state => state.token);
 
-  async function handlePress () {
-    console.log("click")
-    const group = {
-      name: groupName,
-      description: groupDescription
-    }
+//   async function handlePress () {
+//     console.log("click", token)
+//     const group = {
+//       name: groupName,
+//       description: groupDescription
+//     }
 
-    // Add new event to MongoDB
-    try {
-      const resp = await fetch('http://192.168.0.25:3001/group', {
-        method: 'POST',
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify(group)
-      });
+//     // Add new event to MongoDB
+//     try {
+//       const resp = await fetch('http://10.10.22.64:3001/group', {
+//         method: 'POST',
+//         headers: {
+//           "Authorization": `Bearer ${token}`,
+//           "Content-Type":"application/json"
+//         },
+//         body: JSON.stringify(group)
+//       });
 
-      const data = await resp.json();
-      if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
-      if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
-    } catch(err) {
-      Alert.alert("Error", err.message);
-    }
-  }
+//       const data = await resp.json();
+//       console.log(data);
+//       if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
+//       if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
+//     } catch(err) {
+//       Alert.alert("Error", err.message);
+//     }
+//   }
 
-  return (
-    <View style={styles.login.container}>
-      <TextInput
-        placeholder="Group Name"
-        value={groupName}
-        onChangeText={(text) => setGroupName(text)}
-        style={styles.login.input}
-      />
-      <TextInput
-        placeholder="Description"
-        value={groupDescription}
-        onChangeText={(text) => setGroupDescription(text)}
-        style={styles.login.input}
-      />
-      <TouchableOpacity style={styles.login.button} onPress={handlePress}>
-        <Text style={styles.login.buttonText}>Create Group</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
+//   return (
+//     <View style={styles.login.container}>
+//       <TextInput
+//         placeholder="Group Name"
+//         value={groupName}
+//         onChangeText={(text) => setGroupName(text)}
+//         style={styles.login.input}
+//       />
+//       <TextInput
+//         placeholder="Description"
+//         value={groupDescription}
+//         onChangeText={(text) => setGroupDescription(text)}
+//         style={styles.login.input}
+//       />
+//       <TouchableOpacity style={styles.login.button} onPress={handlePress}>
+//         <Text style={styles.login.buttonText}>Create Group</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// }
 
 // function JoinGroupScreen () {
 //   const [groupName, setGroupName] = useState("");

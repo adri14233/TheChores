@@ -25,7 +25,7 @@ export async function postAction(action, token) {
 /* LOGIN */
 
 export async function getLogin(creds) {
-  console.log('herer', ROOT_URL)
+  // console.log('herer', ROOT_URL)
   try {
     const resp = await fetch(ROOT_URL + "/login", {
       method: "POST",
@@ -34,13 +34,12 @@ export async function getLogin(creds) {
       },
       body: JSON.stringify(creds),
     });
-    console.log('past fetch')
+    // console.log('past fetch')
 
     if (!resp.ok) {
       throw new Error("Failed to get token");
     }
     const data = await resp.json();
-    console.log('apisercive:', data)
     return data;
     // const data = await resp.json();
   } catch (err) {
@@ -122,13 +121,19 @@ export async function getActions() {
 // We retrieve actions within the group
 
 export async function getGroups(token) {
+  console.log('GET GROUPS')
   try {
-    const response = await fetch(`${ROOT_URL}`, {
+    const resp = await fetch(`${ROOT_URL}/groups`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    const data = await resp.json();
+    return JSON.parse(data.message);
+    console.log(response);
+    let groups = await response.json();
+    return JSON.parse(groups.message);
     return (groups = await response.json());
     //  return JSON.parse(groups.message);
   } catch (err) {
