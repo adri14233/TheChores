@@ -12,13 +12,18 @@ export default function GroupsScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useEffect(() => {
-    getGroups(token).then((groupList) => setGroups(groupList));
+  useEffect(async () => {
+    handleLoad();
   }, [isFocused, token]);
 
-  const data = getGroups(token)
-    .then((groupList) => setGroups(groupList))
-    .then((data) => JSON.parse(data.message));
+  // const data = getGroups(token)
+  //   .then((groupList) => setGroups(groupList))
+  //   .then((data) => JSON.parse(data.message));
+
+  async function handleLoad () {
+    getGroups(token)
+      .then(res => setGroups(res));
+  }
 
   function onPress(group) {
     dispatch({ type: "SET_GROUP", payload: group });
