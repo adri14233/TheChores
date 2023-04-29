@@ -18,21 +18,23 @@ export default function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
- 
     const creds = {
       username: email,
       password: password,
     };
+    try {
+      const data = await getLogin(creds);
+      const token = data.token;
+      dispatch({ type: "SET_EMAIL", payload: email });
+      dispatch({ type: "SET_PASSWORD", payload: password });
+      dispatch({ type: "SET_TOKEN", payload: token });
+      navigation.navigate("Groups");
+    } catch (err) {
+      console.log("error", err);
+    }
 
-    const data = getLogin(creds);
+    // console.log(token)
 
-    const token = data.token;
-
-    dispatch({ type: "SET_EMAIL", payload: email });
-    dispatch({ type: "SET_PASSWORD", payload: password });
-    dispatch({ type: "SET_TOKEN", payload: token });
-
-    navigation.navigate("Groups");
   };
 
   const handleRegister = () => {
