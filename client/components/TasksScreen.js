@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, TouchableOpacity, Text, Image } from "react-native";
 
 function ChoreButton({ title, value=0 }) {
   const token = useSelector(state => state.token);
