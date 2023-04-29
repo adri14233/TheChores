@@ -85,3 +85,42 @@ export async function postNewTask(task, token){
       Alert.alert("Error", err.message);
     }
   }
+
+  export async function getUsers(token) {
+     let usersData;
+     
+     // We retrieve the users within the group
+     try {
+       const response = await fetch(`${ROOT_URL}/users`, {
+         headers: {
+           Authorization: `Bearer ${token}`,
+          },
+        }).then()
+        
+        usersData = await response.json();
+        return JSON.parse(usersData.message);
+        
+      } catch (err) {
+        throw new Error(err.message);
+      }
+    }
+    
+    export async function getActions(){
+      
+      let actions;
+      try {
+         const response = await fetch(`${ROOT_URL}/actions`, {
+           headers: {
+             Authorization: `Bearer ${token}`,
+           },
+         });
+  
+         actions = await response.json();
+         actions = JSON.parse(actions.message);
+         actions = actions.filter((action) => group._id === action.group);
+       } catch (err) {
+         throw new Error(err.message);
+       }
+     }
+     // We retrieve actions within the group
+  
