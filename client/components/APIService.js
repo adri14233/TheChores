@@ -33,12 +33,13 @@ export async function getLogin(creds) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(creds),
-    }).then((resp) => resp.json());
+    })
 
     if (!resp.ok) {
       throw new Error("Failed to get token");
     }
-    return resp;
+    const data = await resp.json();
+    return data;
     // const data = await resp.json();
   } catch (err) {
     throw new Error(err.message);
