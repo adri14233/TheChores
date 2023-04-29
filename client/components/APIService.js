@@ -35,7 +35,7 @@ export async function getLogin(creds) {
       body: JSON.stringify(creds),
     }).then((resp) => resp.json());
 
-    if (!response.ok) {
+    if (!resp.ok) {
       throw new Error("Failed to get token");
     }
     return resp;
