@@ -1,11 +1,9 @@
-
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { getActions, getUsers } from "./APIService";
 import { styles } from "../App";
 import { View, Text, TouchableOpacity } from "react-native";
-
 
 export default function LeaderboardScreen() {
   const token = useSelector((state) => state.token);
@@ -15,20 +13,20 @@ export default function LeaderboardScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-
-   getUsers(token)
-     .then((data) => data.filter((user) => group.members.includes(user._id)))
-     .then((usersList) => setUsers(usersList));
-}, [isFocused, token]);
-
-const usersData = getUsers(token)
-  .then((data) => data.filter((user) => group.members.includes(user._id)))
-  .then((usersList) => setUsers(usersList));
-
-    const userActions = getActions().then(data => data.filter((action)=> group._id === action.group))
-
-    getUsers(token).then((usersList) => setUsers(usersList));
+    getUsers(token)
+      .then((data) => data.filter((user) => group.members.includes(user._id)))
+      .then((usersList) => setUsers(usersList));
   }, [isFocused, token]);
+
+  const usersData = getUsers(token)
+    .then((data) => data.filter((user) => group.members.includes(user._id)))
+    .then((usersList) => setUsers(usersList));
+
+  const userActions = getActions().then((data) =>
+    data.filter((action) => group._id === action.group)
+  );
+
+  getUsers(token).then((usersList) => setUsers(usersList));
 
   //   async function getUsers(token) {
   // let usersData;
@@ -64,8 +62,7 @@ const usersData = getUsers(token)
   //   throw new Error(err.message);
   // }
 
-    usersData = usersData.filter((user) => group.members.includes(user._id));
-
+  usersData = usersData.filter((user) => group.members.includes(user._id));
 
   // We calculate the score for each user
   for (let i = 0; i < usersData.length; i++) {
@@ -83,8 +80,6 @@ const usersData = getUsers(token)
 
   // We order the users arr of objects by the score
   usersData.sort((a, b) => b.score - a.score);
-
-
 
   const handleAddTask = () => {
     navigation.navigate("Tasks");
