@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
-const DB_PORT = process.env.DB_PORT || 27017;
-const DB_NAME = process.env.DB_NAME || 'the_chores_project';
+const SECURE = require('./SECURE.js');
 
 mongoose.connect(
-  `mongodb://localhost:${DB_PORT}/${DB_NAME}`,
+  'mongodb' + SECURE.MONGO_DB + '/' + SECURE.DB_NAME,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) {
       console.log(`😞 Sorry, something went wrong! ${err}`); // eslint-disable-line no-console
     } else {
-      console.log(`🦆 Database (the_chores_project) connected @ port ${DB_PORT}!`); // eslint-disable-line no-console
+      console.log(`🦆 Database (the_chores_project) connected @ port 3001!`); // eslint-disable-line no-console
     }
   }
 );
