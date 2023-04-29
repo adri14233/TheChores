@@ -116,3 +116,18 @@ export async function getActions() {
   }
 }
 // We retrieve actions within the group
+
+export async function getGroups(token) {
+   try {
+     const response = await fetch(`${ROOT_URL}`, {
+       headers: {
+         Authorization: `Bearer ${token}`,
+       },
+     });
+
+  return groups = await response.json();
+  //  return JSON.parse(groups.message);
+   } catch (err) {
+     throw new Error(err);
+   }
+}
