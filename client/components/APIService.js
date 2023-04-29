@@ -156,7 +156,6 @@ export async function addGroup(token, groupName) {
 }
 
 
-     
 
 export async function getChores(token) {
  
