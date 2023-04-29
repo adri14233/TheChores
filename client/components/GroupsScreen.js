@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { View, TouchableOpacity, Text } from "react-native";
 import { styles } from "../App";
+import { getGroups } from "./APIService";
 
 export default function GroupsScreen() {
   const [groups, setGroups] = useState([]);

@@ -25,6 +25,7 @@ export async function postAction(action, token) {
 /* LOGIN */
 
 export async function getLogin(creds) {
+  console.log('herer', ROOT_URL)
   try {
     const resp = await fetch(ROOT_URL + "/login", {
       method: "POST",
@@ -33,11 +34,13 @@ export async function getLogin(creds) {
       },
       body: JSON.stringify(creds),
     });
+    console.log('past fetch')
 
     if (!resp.ok) {
       throw new Error("Failed to get token");
     }
     const data = await resp.json();
+    console.log('apisercive:', data)
     return data;
     // const data = await resp.json();
   } catch (err) {
@@ -118,16 +121,35 @@ export async function getActions() {
 // We retrieve actions within the group
 
 export async function getGroups(token) {
-   try {
-     const response = await fetch(`${ROOT_URL}`, {
-       headers: {
-         Authorization: `Bearer ${token}`,
-       },
-     });
+  try {
+    const response = await fetch(`${ROOT_URL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  return groups = await response.json();
-  //  return JSON.parse(groups.message);
-   } catch (err) {
-     throw new Error(err);
-   }
+    return (groups = await response.json());
+    //  return JSON.parse(groups.message);
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+export async function addGroup(token, groupName) {
+
+  try {
+    const resp = await fetch(`${ROOT_URL}/group/member`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: groupName }),
+    }).then(res => res.json());
+   
+    return resp;
+  } catch (err) {
+    Alert.alert("Error", err.message);
+    return {message: err.message};
+  }
 }
