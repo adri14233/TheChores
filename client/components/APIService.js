@@ -155,4 +155,45 @@ export async function addGroup(token, groupName) {
   }
 }
 
-     
+
+export async function getChores(token) {
+ 
+    try {
+      const response = await fetch(`${ROOT_URL}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get chores");
+      }
+
+      let chores = await response.json();
+      chores = JSON.parse(chores.message);
+      return chores;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  export async function postChore(action, token) {
+    try {
+      const resp = await fetch(`${ROOT_URL}/action`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(action),
+      });
+
+      const data = await resp.json();
+      if (data.message.includes("Action succesfully saved"))
+        Alert.alert("Chore succesfully added!");
+    } catch (err) {
+      Alert.alert("Error", err.message);
+    }
+  }
+  
+
