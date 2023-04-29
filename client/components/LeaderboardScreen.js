@@ -1,9 +1,11 @@
+
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { getActions, getUsers } from "./APIService";
 import { styles } from "../App";
 import { View, Text, TouchableOpacity } from "react-native";
+
 
 export default function LeaderboardScreen() {
   const token = useSelector((state) => state.token);
@@ -13,6 +15,7 @@ export default function LeaderboardScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
+
    getUsers(token)
      .then((data) => data.filter((user) => group.members.includes(user._id)))
      .then((usersList) => setUsers(usersList));
@@ -23,6 +26,46 @@ const usersData = getUsers(token)
   .then((usersList) => setUsers(usersList));
 
     const userActions = getActions().then(data => data.filter((action)=> group._id === action.group))
+
+    getUsers(token).then((usersList) => setUsers(usersList));
+  }, [isFocused, token]);
+
+  //   async function getUsers(token) {
+  // let usersData;
+  // let actions;
+
+  // // We retrieve the users within the group
+  // try {
+  //   const response = await fetch("http://192.168.0.25:3001/users", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+
+  //   usersData = await response.json();
+  //   usersData = JSON.parse(usersData.message);
+  //   usersData = usersData.filter((user) => group.members.includes(user._id));
+  // } catch (err) {
+  //   throw new Error(err.message);
+  // }
+
+  // // We retrieve actions within the group
+  // try {
+  //   const response = await fetch("http://192.168.0.25:3001/actions", {
+  //     headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   });
+
+  //   actions = await response.json();
+  //   actions = JSON.parse(actions.message);
+  //   actions = actions.filter((action) => group._id === action.group);
+  // } catch (err) {
+  //   throw new Error(err.message);
+  // }
+
+    usersData = usersData.filter((user) => group.members.includes(user._id));
+
 
   // We calculate the score for each user
   for (let i = 0; i < usersData.length; i++) {
@@ -41,7 +84,7 @@ const usersData = getUsers(token)
   // We order the users arr of objects by the score
   usersData.sort((a, b) => b.score - a.score);
 
-//   return usersData;
+
 
   const handleAddTask = () => {
     navigation.navigate("Tasks");

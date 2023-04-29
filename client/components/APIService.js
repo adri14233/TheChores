@@ -112,6 +112,7 @@ export async function getActions() {
       },
     });
 
+
     actions = await response.json();
     return JSON.parse(actions.message);
   } catch (err) {
@@ -154,6 +155,7 @@ export async function addGroup(token, groupName) {
   }
 }
 
+
 export async function getChores(token) {
  
     try {
@@ -194,3 +196,4 @@ export async function getChores(token) {
     }
   }
   
+
