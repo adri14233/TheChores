@@ -13,10 +13,10 @@ export default function LeaderboardScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    getUsers(token)
-      .then((data) => data.filter((user) => group.members.includes(user._id)))
-      .then((usersList) => setUsers(usersList));
-  }, [isFocused, token]);
+    // getUsers(token)
+    //   .then((data) => data.filter((user) => group.members.includes(user._id)))
+    //   .then((usersList) => setUsers(usersList));
+  }, []);
 
   const usersData = getUsers(token)
     .then((data) => data.filter((user) => group.members.includes(user._id)))
