@@ -3,6 +3,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { styles } from "../App";
 import { View, ScrollView } from "react-native";
+import { getChores } from "./APIService";
 import ChoreButton from "./ChoreButton";
 
 export default function TasksScreen() {
@@ -14,24 +15,6 @@ export default function TasksScreen() {
     getChores(token).then((choreList) => setChores(choreList));
   }, [isFocused, token]);
 
-  // async function getChores (url, token) {
-  //   try {
-  //     const response = await fetch(url, {
-  //       headers: {
-  //         "Authorization": `Bearer ${token}`
-  //     }});
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to get chores');
-  //     }
-
-  //     let chores = await response.json();
-  //     chores = JSON.parse(chores.message)
-  //     return chores;
-  //   } catch (err) {
-  //     throw new Error(err);
-  //   }
-  // }
 
   return (
     <ScrollView style={styles.container}>
