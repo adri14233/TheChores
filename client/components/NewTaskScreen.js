@@ -11,17 +11,22 @@ export default function NewTaskScreen() {
   const token = useSelector((state) => state.token);
 
   async function handlePress() {
+
     const task = {
       name: taskName,
       description: taskDescription,
       value: taskValue,
     };
 
-    const data = await postNewTask(task, token)
-   if (data.message === "Chore already exists!")
-     Alert.alert("Chore already exists!");
-   if (data.message.includes("Chore succesfully created"))
-     Alert.alert(`${taskName} task succesfully created!`);
+    try {
+      const data = await postNewTask(task, token);
+  
+      if (data.message === "Chore already exists!") Alert.alert("Chore already exists!");
+      if (data.message.includes("Chore succesfully created")) Alert.alert(`${taskName} task succesfully created!`);
+    } catch (err) {
+      throw new Error(err.message);
+    }
+
   }
 
   return (

@@ -72,14 +72,18 @@ export async function registerUser(user) {
 
 export async function postNewTask(task, token) {
   try {
-    return (resp = await fetch(`${ROOT_URL}/chore`, {
+    const resp = await fetch(`${ROOT_URL}/chore`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(task),
-    }).then((res) => res.json));
+    });
+
+    const data = await resp.json();
+    return data;
+
   } catch (err) {
     throw new Error(err.message);
     // Alert.alert("Error", err.message);
