@@ -86,36 +86,39 @@ export async function postNewTask(task, token) {
   }
 }
 
-export async function getUsers(token) {
-  let usersData;
+export async function getUsers2(token) {
 
   // We retrieve the users within the group
   try {
-    const response = await fetch(`${ROOT_URL}/users`, {
+    const resp = await fetch(`${ROOT_URL}/users`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
 
-    usersData = await response.json();
-    return JSON.parse(usersData.message);
+    const data = await resp.json();
+    return data;
+    // const data  = await resp.json();
+    // return data;
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
-export async function getActions() {
-  let actions;
+export async function getActions2(token) {
+
   try {
-    const response = await fetch(`${ROOT_URL}/actions`, {
+    const resp = await fetch(`${ROOT_URL}/actions`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
 
 
-    actions = await response.json();
-    return JSON.parse(actions.message);
+    const data = resp.json();
+    return data;
+    // actions = await response.json();
+    // return JSON.parse(actions.message);
   } catch (err) {
     throw new Error(err.message);
   }
