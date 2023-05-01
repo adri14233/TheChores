@@ -48,7 +48,7 @@ export async function getLogin(creds) {
 }
 
 export async function registerUser(user) {
-  console.log(ROOT_URL);
+  // console.log(ROOT_URL);
   try {
     const resp = fetch(`${ROOT_URL}/user`, {
       method: "POST",
@@ -59,61 +59,70 @@ export async function registerUser(user) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         return data;
       });
 
     return resp;
   } catch (err) {
-    Alert.alert(err.message);
+    throw new Error(err.message);
+    // Alert.alert(err.message);
   }
 }
 
 export async function postNewTask(task, token) {
   try {
-    return (resp = await fetch(`${ROOT_URL}/chore`, {
+    const resp = await fetch(`${ROOT_URL}/chore`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(task),
-    }).then((res) => res.json));
+    });
+
+    const data = await resp.json();
+    return data;
+
   } catch (err) {
-    Alert.alert("Error", err.message);
+    throw new Error(err.message);
+    // Alert.alert("Error", err.message);
   }
 }
 
-export async function getUsers(token) {
-  let usersData;
+export async function getUsers2(token) {
 
   // We retrieve the users within the group
   try {
-    const response = await fetch(`${ROOT_URL}/users`, {
+    const resp = await fetch(`${ROOT_URL}/users`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
 
-    usersData = await response.json();
-    return JSON.parse(usersData.message);
+    const data = await resp.json();
+    return data;
+    // const data  = await resp.json();
+    // return data;
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
-export async function getActions() {
-  let actions;
+export async function getActions2(token) {
+
   try {
-    const response = await fetch(`${ROOT_URL}/actions`, {
+    const resp = await fetch(`${ROOT_URL}/actions`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
 
 
-    actions = await response.json();
-    return JSON.parse(actions.message);
+    const data = resp.json();
+    return data;
+    // actions = await response.json();
+    // return JSON.parse(actions.message);
   } catch (err) {
     throw new Error(err.message);
   }
@@ -121,7 +130,7 @@ export async function getActions() {
 // We retrieve actions within the group
 
 export async function getGroups(token) {
-  console.log('GET GROUPS')
+  // console.log('GET GROUPS')
   try {
     const resp = await fetch(`${ROOT_URL}/groups`, {
       headers: {
@@ -141,65 +150,85 @@ export async function getGroups(token) {
   }
 }
 
-export async function addGroup(token, groupName) {
+export async function addGroup(token, group) {
 
   try {
-    const resp = await fetch(`${ROOT_URL}/group/member`, {
+    const resp = await fetch(`${ROOT_URL}/group`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: groupName }),
-    }).then(res => res.json());
-   
-    return resp;
+      body: JSON.stringify(group),
+    })
+
+    const data = await resp.json();
+    return data;
+
   } catch (err) {
-    Alert.alert("Error", err.message);
-    return {message: err.message};
+    throw new Error(err.message);
+    // Alert.alert("Error", err.message);
+    // return {message: err.message};
   }
 }
 
+export async function addUserToGroup(token, groupName) {
+  try {
+    const resp = await fetch(`${ROOT_URL}/group/member`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name: groupName })
+    })
 
+    const data = await resp.json();
+    return data;
+
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
 export async function getChores(token) {
- 
-    try {
-      const response = await fetch(`${ROOT_URL}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
 
-      if (!response.ok) {
-        throw new Error("Failed to get chores");
-      }
+  try {
+    const response = await fetch(`${ROOT_URL}/chores`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    });
 
-      let chores = await response.json();
-      chores = JSON.parse(chores.message);
-      return chores;
-    } catch (err) {
-      throw new Error(err);
+    if (!response.ok) {
+      throw new Error("Failed to get chores");
     }
-  }
 
-  export async function postChore(action, token) {
-    try {
-      const resp = await fetch(`${ROOT_URL}/action`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(action),
-      });
-
-      const data = await resp.json();
-      if (data.message.includes("Action succesfully saved"))
-        Alert.alert("Chore succesfully added!");
-    } catch (err) {
-      Alert.alert("Error", err.message);
-    }
+    const chores = await response.json();
+    return JSON.parse(chores.message);
+  } catch (err) {
+    throw new Error(err);
   }
-  
+}
+
+export async function postChore(action, token) {
+  try {
+    const resp = await fetch(`${ROOT_URL}/action`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(action),
+    });
+
+    const data = await resp.json();
+    if (data.message.includes("Action succesfully saved"))
+      Alert.alert("Chore succesfully added!");
+  } catch (err) {
+    throw new Error(err.message);
+    // Alert.alert("Error", err.message);
+  }
+}
+
 

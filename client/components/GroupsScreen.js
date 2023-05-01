@@ -12,7 +12,7 @@ export default function GroupsScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  useEffect(async () => {
+  useEffect(() => {
     handleLoad();
   }, [isFocused, token]);
 
@@ -21,7 +21,7 @@ export default function GroupsScreen() {
   //   .then((data) => JSON.parse(data.message));
 
   async function handleLoad () {
-    getGroups(token)
+    await getGroups(token)
       .then(res => setGroups(res));
   }
 

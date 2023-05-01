@@ -18,8 +18,7 @@ export default function NewGroupScreen () {
     }
 
     try {
-      const data = await addGroup(token, groupName);
-
+      const data = await addGroup(token, group);
       if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
       if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
     } catch (err) {
