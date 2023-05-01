@@ -7,7 +7,7 @@ import LoginScreen from '../components/LoginScreen.js';
 import { Provider } from 'react-redux';
 import { legacy_createStore } from 'redux';
 
-import loginReducer from '../reducer';
+import loginReducer from '../reducer.js';
 let store = legacy_createStore(loginReducer);
 
 describe('Testing App', () => {

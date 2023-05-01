@@ -14,7 +14,7 @@ let store = legacy_createStore(loginReducer);
 
 /* COMPONENT */
 import LoginScreen from './components/LoginScreen'
-import RegisterScreen from './components/RegisterScreen'
+import RegisterScreen from './components/RegisterScreen.tsx'
 import NewTaskScreen from './components/NewTaskScreen'
 import GroupsScreen from './components/GroupsScreen'
 import LeaderboardScreen from './components/LeaderboardScreen'
