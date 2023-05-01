@@ -33,9 +33,10 @@
     "redux": "^4.2.1"
   },
   "jest": {
-    "preset": "[react-native or jest-expo]",
-   "setupFilesAfterEnv": ["./jest-setup-after-env.js"]
-
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
