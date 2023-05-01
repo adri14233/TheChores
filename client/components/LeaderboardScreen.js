@@ -23,9 +23,9 @@ export default function LeaderboardScreen() {
     .then((usersList) => setUsers(usersList));
 
 
-let usersData = getUsers(token)
-  .then((data) => data.filter((user) => group.members.includes(user._id)))
-  .then((usersList) => setUsers(usersList));
+// let usersData = getUsers(token)
+//   .then((data) => data.filter((user) => group.members.includes(user._id)))
+//   .then((usersList) => setUsers(usersList));
 
     const userActions = getActions().then(data => data.filter((action)=> group._id === action.group))
 

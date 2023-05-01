@@ -48,7 +48,7 @@ export async function getLogin(creds) {
 }
 
 export async function registerUser(user) {
-  console.log(ROOT_URL);
+  // console.log(ROOT_URL);
   try {
     const resp = fetch(`${ROOT_URL}/user`, {
       method: "POST",
@@ -59,13 +59,14 @@ export async function registerUser(user) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         return data;
       });
 
     return resp;
   } catch (err) {
-    Alert.alert(err.message);
+    throw new Error(err.message);
+    // Alert.alert(err.message);
   }
 }
 
@@ -80,7 +81,8 @@ export async function postNewTask(task, token) {
       body: JSON.stringify(task),
     }).then((res) => res.json));
   } catch (err) {
-    Alert.alert("Error", err.message);
+    throw new Error(err.message);
+    // Alert.alert("Error", err.message);
   }
 }
 
@@ -121,7 +123,7 @@ export async function getActions() {
 // We retrieve actions within the group
 
 export async function getGroups(token) {
-  console.log('GET GROUPS')
+  // console.log('GET GROUPS')
   try {
     const resp = await fetch(`${ROOT_URL}/groups`, {
       headers: {
@@ -141,22 +143,44 @@ export async function getGroups(token) {
   }
 }
 
-export async function addGroup(token, groupName) {
+export async function addGroup(token, group) {
 
   try {
-    const resp = await fetch(`${ROOT_URL}/group/member`, {
+    const resp = await fetch(`${ROOT_URL}/group`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: groupName }),
-    }).then(res => res.json());
+      body: JSON.stringify(group),
+    })
+
+    const data = await resp.json();
+    return data;
    
-    return resp;
   } catch (err) {
-    Alert.alert("Error", err.message);
-    return {message: err.message};
+    throw new Error(err.message);
+    // Alert.alert("Error", err.message);
+    // return {message: err.message};
+  }
+}
+
+export async function addUserToGroup (token, groupName) {
+  try {
+    const resp = await fetch(`${ROOT_URL}/group/member`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({name: groupName})
+    })
+
+    const data = await resp.json();
+    return data;
+
+  } catch (err) {
+    throw new Error(err);
   }
 }
 
@@ -198,7 +222,8 @@ export async function getChores(token) {
       if (data.message.includes("Action succesfully saved"))
         Alert.alert("Chore succesfully added!");
     } catch (err) {
-      Alert.alert("Error", err.message);
+      throw new Error(err.message);
+      // Alert.alert("Error", err.message);
     }
   }
   

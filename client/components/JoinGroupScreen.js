@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { View, TextInput, TouchableOpacity, Text, Alert } from "react-native";
 import { styles } from "../App";
-import { addGroup } from "./APIService";
+import { addUserToGroup } from "./APIService";
 
 export default function JoinGroupScreen() {
   const [groupName, setGroupName] = useState("");
@@ -13,18 +13,18 @@ export default function JoinGroupScreen() {
   async function handlePress() {
     try {
      
-      const data = await addGroup(token, groupName);
+      const data = await addUserToGroup(token, groupName);
     
-      if (data.message === "Group does not exist!") {
+      if (data.message.includes("Group does not exist!")) {
         Alert.alert("Error: Group does not exist!");
-      } else if (data.message === "User already in group!") {
+      } else if (data.message.includes("User already in group!")) {
         Alert.alert("Error: User already in group!");
-      } else if (data.message === "succesfully added to Group") {
+      } else if (data.message.includes("succesfully added to Group")) {
         Alert.alert("User added to the group!");
       } else {
         throw new Error(data.message);
       }
-      return resp;
+
     } catch (err) {
       Alert.alert("Error", err.message);
       return { message: err.message };
