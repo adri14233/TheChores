@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { styles } from "../App";
 import { View, ScrollView, ViewStyle } from "react-native";
 import { getChores } from "./APIService";
 import ChoreButton from "./ChoreButton";
-import { Text } from "react-native-elements";
 
 interface IChore {
   name: string,

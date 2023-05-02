@@ -1,26 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import {
-  useFonts,
-  PressStart2P_400Regular,
-} from "@expo-google-fonts/press-start-2p";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StatusBar,
-  TextStyle,
-  
-} from "react-native";
-
+import { View, TextInput, TouchableOpacity, Text, StatusBar, TextStyle } from "react-native";
 import { getLogin } from "./APIService";
 
 const LoginScreen: React.FC = () => {
-     const [fontsLoaded] = useFonts({
-       PressStart2P_400Regular,
-     });
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -29,8 +14,9 @@ const LoginScreen: React.FC = () => {
   const handleLogin = async () => {
     const creds = {
       username: email,
-      password: password,
+      password: password
     };
+
     try {
       const data = await getLogin(creds);
       const token = data.token;
@@ -39,57 +25,56 @@ const LoginScreen: React.FC = () => {
       dispatch({ type: "SET_TOKEN", payload: token });
       navigation.navigate("Groups" as never)
     } catch (err) {
-        console.log("error", err);
+      console.log("error", err);
     }
-    
-   
-};
+  };
 
-const handleRegister = () => {
+  const handleRegister = () => {
     navigation.navigate("Register" as never);
-};
-const buttonTextStyle: TextStyle = {
-  color: "#ccc",
-  fontSize: 20,
-  fontFamily: "PressStart2P_400Regular",
-  textAlign: "center",
-};
+  };
 
-const containerStyle: TextStyle = {
-  flex: 1,
-  backgroundColor: "#303030",
-  justifyContent: "center",
-  alignItems: "center",
-};
+  const buttonTextStyle: TextStyle = {
+    color: "#ccc",
+    fontSize: 20,
+    fontFamily: "PressStart2P_400Regular",
+    textAlign: "center",
+  };
 
-const inputStyle: TextStyle = {
-  width: "80%",
-  padding: 10,
-  borderWidth: 1,
-  borderColor: "#ccc",
-  backgroundColor: "#eee",
-  borderRadius: 5,
-  marginBottom: 10,
-  fontSize: 18,
-  fontFamily: "PressStart2P_400Regular",
-  textAlign: "center",
-};
+  const containerStyle: TextStyle = {
+    flex: 1,
+    backgroundColor: "#303030",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
-const buttonStye: TextStyle = {
-  backgroundColor: "#fff",
-  borderRadius: 10,
-  padding: 10,
-  marginVertical: 10,
-  marginHorizontal: 20,
-  alignItems: "center",
-  justifyContent: "center",
-  borderWidth: 2,
-  borderColor: "#000",
-  fontFamily: "PressStart2P_400Regular",
-  fontSize: 16,
-  color: "#000",
-  textTransform: "uppercase",
-};
+  const inputStyle: TextStyle = {
+    width: "80%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#eee",
+    borderRadius: 5,
+    marginBottom: 10,
+    fontSize: 18,
+    fontFamily: "PressStart2P_400Regular",
+    textAlign: "center",
+  };
+
+  const buttonStye: TextStyle = {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#000",
+    fontFamily: "PressStart2P_400Regular",
+    fontSize: 16,
+    color: "#000",
+    textTransform: "uppercase",
+  };
 
   return (
     <View style={containerStyle}>

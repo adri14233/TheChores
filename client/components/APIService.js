@@ -79,7 +79,7 @@ export async function postNewTask(task, token) {
   }
 }
 
-export async function getUsers2(token) {
+export async function getUsers(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/users`, {
       headers: {
@@ -95,7 +95,7 @@ export async function getUsers2(token) {
   }
 }
 
-export async function getActions2(token) {
+export async function getActions(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/actions`, {
       headers: {

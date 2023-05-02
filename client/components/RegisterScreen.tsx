@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
-
 import { registerUser } from "./APIService";
 
 const loginContainerStyle: ViewStyle = {
@@ -33,11 +32,7 @@ const loginButtonStyle: ViewStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   borderWidth: 2,
-  borderColor: '#000',
-  // fontFamily: 'PressStart2P_400Regular',
-  // fontSize: 16,
-  // color: '#000',
-  // textTransform: 'uppercase',
+  borderColor: '#000'
 }
 
 const loginButtonTextStyle: TextStyle = {

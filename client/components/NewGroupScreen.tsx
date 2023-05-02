@@ -1,4 +1,3 @@
-import { styles } from "../App";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { View, TextInput, TouchableOpacity, Alert, Text, ViewStyle, TextStyle } from "react-native";
@@ -33,11 +32,7 @@ const loginButtonStyle: ViewStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   borderWidth: 2,
-  borderColor: '#000',
-  // fontFamily: 'PressStart2P_400Regular',
-  // fontSize: 16,
-  // color: '#000',
-  // textTransform: 'uppercase',
+  borderColor: '#000'
 }
 
 const loginButtonTextStyle: TextStyle = {
