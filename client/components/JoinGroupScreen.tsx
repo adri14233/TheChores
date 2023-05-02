@@ -1,4 +1,3 @@
-const ROOT_URL = "http://10.10.22.53:3001";
 
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,10 +10,10 @@ import {
   ViewStyle,
   TextStyle,
 } from "react-native";
-import { styles } from "../App";
+
 import { addUserToGroup } from "./APIService";
 
-export default function JoinGroupScreen() {
+const JoinGroupScreen: React.FC = () => {
   const [groupName, setGroupName] = useState("");
   const token = useSelector((state: any) => state.token);
 
@@ -94,3 +93,5 @@ export default function JoinGroupScreen() {
     </View>
   );
 }
+
+export default JoinGroupScreen;

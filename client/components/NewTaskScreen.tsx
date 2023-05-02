@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
 import { postNewTask } from "./APIService";
 
-export default function NewTaskScreen() {
+const NewTaskScreen = () => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskValue, setTaskValue] = useState("");
@@ -96,3 +96,4 @@ const buttonTestStyle: TextStyle = {
     </View>
   );
 }
+export default NewTaskScreen;

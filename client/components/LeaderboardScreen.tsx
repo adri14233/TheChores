@@ -5,7 +5,7 @@ import { getActions2, getUsers2 } from "./APIService";
 import { styles } from "../App";
 import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
 
-export default function LeaderboardScreen() {
+const LeaderboardScreen = () => {
   const token = useSelector((state:any) => state.token);
   const group = useSelector((state:any) => state.group);
   let [users, setUsers] = useState([] as unknown as user[]);
@@ -160,3 +160,5 @@ const buttonTextStyle: TextStyle = {
     </>
   );
 }
+
+export default LeaderboardScreen;

@@ -12,9 +12,9 @@ import {
   Text,
   StatusBar,
   TextStyle,
-  ViewStyle,
+  
 } from "react-native";
-import { styles } from "../App";
+
 import { getLogin } from "./APIService";
 
 const LoginScreen: React.FC = () => {
