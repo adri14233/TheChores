@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
-import { styles } from "../App";
+
 import { registerUser } from "./APIService";
 
 const loginContainerStyle: ViewStyle = {
