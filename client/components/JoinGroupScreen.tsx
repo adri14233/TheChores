@@ -1,16 +1,7 @@
 
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Alert,
-  ViewStyle,
-  TextStyle,
-} from "react-native";
-
+import { View, TextInput, TouchableOpacity, Text, Alert,ViewStyle, TextStyle } from "react-native";
 import { addUserToGroup } from "./APIService";
 
 const JoinGroupScreen: React.FC = () => {

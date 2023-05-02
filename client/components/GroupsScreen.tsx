@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { View, TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
-import { styles } from "../App";
 import { getGroups } from "./APIService";
 
 interface IGroup {
@@ -10,11 +9,15 @@ interface IGroup {
   name: string
 }
 
+const groupsScreenAuxStyle : ViewStyle = {
+  backgroundColor: '#303030',
+  padding: 20
+}
+
 const groupsScreenContainerStyle : ViewStyle = {
   flex: 1,
   backgroundColor: '#303030',
-  padding: 20,
-  // fontFamily: 'PressStart2P_400Regular',
+  padding: 20
 }
 
 const groupsScreenGroupContainerStyle : ViewStyle = {
@@ -22,8 +25,7 @@ const groupsScreenGroupContainerStyle : ViewStyle = {
   borderRadius: 8,
   marginBottom: 20,
   paddingVertical: 16,
-  paddingHorizontal: 16,
-  // fontFamily: 'PressStart2P_400Regular',
+  paddingHorizontal: 16
 }
 
 const groupsScreenGroupTitleStyle : TextStyle = {
@@ -42,18 +44,14 @@ const groupsScreenLoginButton2 : ViewStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   borderWidth: 2,
-  borderColor: '#000',
-  // fontFamily: 'PressStart2P_400Regular',
-  // fontSize: 16,
-  // color: '#000',
-  // textTransform: 'uppercase',
+  borderColor: '#000'
 }
 
 const groupsScreenLoginButtonText2 : TextStyle = {
   color: '#303030',
   fontSize: 20,
   fontFamily: 'PressStart2P_400Regular',
-  textAlign: 'center',
+  textAlign: 'center'
 }
 
 const GroupsScreen: React.FC = () => {
@@ -98,7 +96,7 @@ const GroupsScreen: React.FC = () => {
         </TouchableOpacity>
       ))}
     </View>
-    <View style={styles.aux}>
+    <View style={groupsScreenAuxStyle}>
       <TouchableOpacity
         style={groupsScreenLoginButton2}
         onPress={() => handleJoinGroup()}

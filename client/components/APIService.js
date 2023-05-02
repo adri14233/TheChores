@@ -15,8 +15,6 @@ export async function postAction(action, token) {
       body: JSON.stringify(action),
     }).then((resp) => resp.json()));
 
-    // const data = await resp.json();
-    // if (data.message.includes('Action succesfully saved')) Alert.alert("Chore succesfully added!");
   } catch (err) {
     throw new Error(err.message);
   }
@@ -25,7 +23,6 @@ export async function postAction(action, token) {
 /* LOGIN */
 
 export async function getLogin(creds) {
-  // console.log('herer', ROOT_URL)
   try {
     const resp = await fetch(ROOT_URL + "/login", {
       method: "POST",
@@ -34,21 +31,17 @@ export async function getLogin(creds) {
       },
       body: JSON.stringify(creds),
     });
-    // console.log('past fetch')
 
-    if (!resp.ok) {
-      throw new Error("Failed to get token");
-    }
+    if (!resp.ok) throw new Error("Failed to get token");
+
     const data = await resp.json();
     return data;
-    // const data = await resp.json();
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
 export async function registerUser(user) {
-  // console.log(ROOT_URL);
   try {
     const resp = fetch(`${ROOT_URL}/user`, {
       method: "POST",
@@ -58,15 +51,12 @@ export async function registerUser(user) {
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
-      .then((data) => {
-        // console.log(data);
-        return data;
-      });
+      .then((data) => { return data });
 
     return resp;
+
   } catch (err) {
     throw new Error(err.message);
-    // Alert.alert(err.message);
   }
 }
 
@@ -86,13 +76,10 @@ export async function postNewTask(task, token) {
 
   } catch (err) {
     throw new Error(err.message);
-    // Alert.alert("Error", err.message);
   }
 }
 
-export async function getUsers2(token) {
-
-  // We retrieve the users within the group
+export async function getUsers(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/users`, {
       headers: {
@@ -102,15 +89,13 @@ export async function getUsers2(token) {
 
     const data = await resp.json();
     return data;
-    // const data  = await resp.json();
-    // return data;
+
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
-export async function getActions2(token) {
-
+export async function getActions(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/actions`, {
       headers: {
@@ -118,19 +103,15 @@ export async function getActions2(token) {
       },
     });
 
-
     const data = resp.json();
     return data;
-    // actions = await response.json();
-    // return JSON.parse(actions.message);
+
   } catch (err) {
     throw new Error(err.message);
   }
 }
-// We retrieve actions within the group
 
 export async function getGroups(token) {
-  // console.log('GET GROUPS')
   try {
     const resp = await fetch(`${ROOT_URL}/groups`, {
       headers: {
@@ -140,18 +121,13 @@ export async function getGroups(token) {
 
     const data = await resp.json();
     return JSON.parse(data.message);
-    console.log(response);
-    let groups = await response.json();
-    return JSON.parse(groups.message);
-    return (groups = await response.json());
-    //  return JSON.parse(groups.message);
+
   } catch (err) {
     throw new Error(err);
   }
 }
 
-export async function addGroup(token, group) {
-
+export async function addGroup(token, group) {s
   try {
     const resp = await fetch(`${ROOT_URL}/group`, {
       method: "POST",
@@ -167,8 +143,6 @@ export async function addGroup(token, group) {
 
   } catch (err) {
     throw new Error(err.message);
-    // Alert.alert("Error", err.message);
-    // return {message: err.message};
   }
 }
 
@@ -192,7 +166,6 @@ export async function addUserToGroup(token, groupName) {
 }
 
 export async function getChores(token) {
-
   try {
     const response = await fetch(`${ROOT_URL}/chores`, {
       headers: {
@@ -200,12 +173,11 @@ export async function getChores(token) {
       },
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to get chores");
-    }
+    if (!response.ok) throw new Error("Failed to get chores");
 
     const chores = await response.json();
     return JSON.parse(chores.message);
+
   } catch (err) {
     throw new Error(err);
   }
@@ -223,11 +195,11 @@ export async function postChore(action, token) {
     });
 
     const data = await resp.json();
-    if (data.message.includes("Action succesfully saved"))
-      Alert.alert("Chore succesfully added!");
+
+    if (data.message.includes("Action succesfully saved")) Alert.alert("Chore succesfully added!");
+
   } catch (err) {
     throw new Error(err.message);
-    // Alert.alert("Error", err.message);
   }
 }
 

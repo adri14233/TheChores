@@ -1,13 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
 import { postNewTask } from "./APIService";
 
-const NewTaskScreen = () => {
+const NewTaskScreen: React.FC = () => {
+
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskValue, setTaskValue] = useState("");
-  const token = useSelector((state:any) => state.token);
+  const token = useSelector((state: any) => state.token);
 
   async function handlePress() {
     const task = {
@@ -23,52 +24,52 @@ const NewTaskScreen = () => {
         Alert.alert("Chore already exists!");
       if (data.message.includes("Chore succesfully created"))
         Alert.alert(`${taskName} task succesfully created!`);
-    } catch (err:any) {
+    } catch (err: any) {
       throw new Error(err.message);
     }
   }
-const containerStyle: ViewStyle = {
-  flex: 1,
-  backgroundColor: "#303030",
-  justifyContent: "center",
-  alignItems: "center",
-};
+  const containerStyle: ViewStyle = {
+    flex: 1,
+    backgroundColor: "#303030",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
-const inputStyle: TextStyle = {
-  width: "80%",
-  padding: 10,
-  borderWidth: 1,
-  borderColor: "#ccc",
-  backgroundColor: "#eee",
-  borderRadius: 5,
-  marginBottom: 10,
-  fontSize: 18,
-  fontFamily: "PressStart2P_400Regular",
-  textAlign: "center",
-};
+  const inputStyle: TextStyle = {
+    width: "80%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#eee",
+    borderRadius: 5,
+    marginBottom: 10,
+    fontSize: 18,
+    fontFamily: "PressStart2P_400Regular",
+    textAlign: "center",
+  };
 
-const buttonsStyle: TextStyle = {
-  backgroundColor: "#fff",
-  borderRadius: 10,
-  padding: 10,
-  marginVertical: 10,
-  marginHorizontal: 20,
-  alignItems: "center",
-  justifyContent: "center",
-  borderWidth: 2,
-  borderColor: "#000",
-  fontFamily: "PressStart2P_400Regular",
-  fontSize: 16,
-  color: "#000",
-  textTransform: "uppercase",
-};
+  const buttonsStyle: TextStyle = {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#000",
+    fontFamily: "PressStart2P_400Regular",
+    fontSize: 16,
+    color: "#000",
+    textTransform: "uppercase",
+  };
 
-const buttonTestStyle: TextStyle = {
-  color: "#ccc",
-  fontSize: 20,
-  fontFamily: "PressStart2P_400Regular",
-  textAlign: "center",
-};
+  const buttonTestStyle: TextStyle = {
+    color: "#ccc",
+    fontSize: 20,
+    fontFamily: "PressStart2P_400Regular",
+    textAlign: "center",
+  };
 
   return (
     <View style={containerStyle}>
@@ -96,4 +97,5 @@ const buttonTestStyle: TextStyle = {
     </View>
   );
 }
+
 export default NewTaskScreen;
