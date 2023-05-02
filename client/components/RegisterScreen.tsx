@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
+
+import { View, ImageBackground, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
 import { registerUser } from "./APIService";
 
 const loginContainerStyle: ViewStyle = {
@@ -18,8 +19,9 @@ const loginInputStyle: TextStyle = {
   backgroundColor: '#eee',
   borderRadius: 5,
   marginBottom: 10,
+  marginLeft: 40,
   fontSize: 18,
-  fontFamily: 'PressStart2P_400Regular',
+  fontFamily: 'sans-serif',
   textAlign: 'center',
 }
 
@@ -28,19 +30,29 @@ const loginButtonStyle: ViewStyle = {
   borderRadius: 10,
   padding: 10,
   marginVertical: 10,
-  marginHorizontal: 20,
+  marginHorizontal: 80,
   alignItems: 'center',
   justifyContent: 'center',
   borderWidth: 2,
-  borderColor: '#000'
+
+  borderColor: '#000',
+
+
 }
 
 const loginButtonTextStyle: TextStyle = {
-  color: '#ccc',
+  color: 'black',
   fontSize: 20,
-  fontFamily: 'PressStart2P_400Regular',
+  fontFamily: 'sans-serif',
   textAlign: 'center',
 }
+  const imgStyle: ViewStyle = {
+    flex: 1,
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    marginTop: -100,
+  };
 
 
 const RegisterScreen: React.FC = () => {
@@ -73,37 +85,43 @@ const RegisterScreen: React.FC = () => {
 
   return (
     <View style={loginContainerStyle}>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        style={loginInputStyle}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-        style={loginInputStyle}
-      />
-      <TextInput
-        placeholder="First Name"
-        value={firstName}
-        onChangeText={(text) => setFirstName(text)}
-        style={loginInputStyle}
-      />
-      <TextInput
-        placeholder="Last Name"
-        value={lastName}
-        onChangeText={(text) => setLastName(text)}
-        style={loginInputStyle}
-      />
-      <TouchableOpacity style={loginButtonStyle} onPress={handleRegister}>
-        <Text style={loginButtonTextStyle}>REGISTER</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={loginButtonStyle} onPress={handleLogin}>
-        <Text style={loginButtonTextStyle}>LOGIN</Text>
-      </TouchableOpacity>
+      <ImageBackground
+        source={require("../assets/bg-front.jpg")}
+        resizeMode="cover"
+        style={imgStyle}
+      >
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={loginInputStyle}
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+          style={loginInputStyle}
+        />
+        <TextInput
+          placeholder="First Name"
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+          style={loginInputStyle}
+        />
+        <TextInput
+          placeholder="Last Name"
+          value={lastName}
+          onChangeText={(text) => setLastName(text)}
+          style={loginInputStyle}
+        />
+        <TouchableOpacity style={loginButtonStyle} onPress={handleRegister}>
+          <Text style={loginButtonTextStyle}>REGISTER</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={loginButtonStyle} onPress={handleLogin}>
+          <Text style={loginButtonTextStyle}>LOGIN</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 }

@@ -1,10 +1,25 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { View, TextInput, TouchableOpacity, Text, StatusBar, TextStyle } from "react-native";
+
+// import { useFonts, Raleway_400Regular } from "@expo-google-fonts/raleway";
+import * as Animatable from 'react-native-animatable'
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+  TextStyle,
+  ViewStyle,
+  ImageBackground,
+} from "react-native";
 import { getLogin } from "./APIService";
 
 const LoginScreen: React.FC = () => {
+  // const [fontsLoaded] = useFonts({
+  //   Raleway_400Regular,
+  // });
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +38,7 @@ const LoginScreen: React.FC = () => {
       dispatch({ type: "SET_EMAIL", payload: email });
       dispatch({ type: "SET_PASSWORD", payload: password });
       dispatch({ type: "SET_TOKEN", payload: token });
-      navigation.navigate("Groups" as never)
+      navigation.navigate("Groups" as never);
     } catch (err) {
       console.log("error", err);
     }
@@ -33,18 +48,16 @@ const LoginScreen: React.FC = () => {
     navigation.navigate("Register" as never);
   };
 
-  const buttonTextStyle: TextStyle = {
-    color: "#ccc",
-    fontSize: 20,
-    fontFamily: "PressStart2P_400Regular",
-    textAlign: "center",
-  };
-
   const containerStyle: TextStyle = {
     flex: 1,
-    backgroundColor: "#303030",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+  };
+  const buttonTextStyle: TextStyle = {
+    color: "black",
+    fontSize: 20,
+    fontFamily: "sans-serif",
+    textAlign: "center",
   };
 
   const inputStyle: TextStyle = {
@@ -55,8 +68,9 @@ const LoginScreen: React.FC = () => {
     backgroundColor: "#eee",
     borderRadius: 5,
     marginBottom: 10,
+    marginLeft: 40,
     fontSize: 18,
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     textAlign: "center",
   };
 
@@ -65,42 +79,66 @@ const LoginScreen: React.FC = () => {
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 80,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
     borderColor: "#000",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     fontSize: 16,
-    color: "#000",
     textTransform: "uppercase",
+  };
+
+  const imgStyle: ViewStyle = {
+    flex: 1,
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    marginTop: -100
+  };
+
+  const logoStyle: ViewStyle = {
+    width: 400,
+    height: 300,
+    marginBottom: 40,
+
   };
 
   return (
     <View style={containerStyle}>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        style={inputStyle}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-        secureTextEntry
-        style={inputStyle}
-      />
-      <TouchableOpacity style={buttonStye} onPress={handleLogin}>
-        <Text style={buttonTextStyle}>LOGIN</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={buttonStye} onPress={handleRegister}>
-        <Text style={buttonTextStyle}>REGISTER</Text>
-      </TouchableOpacity>
-      <StatusBar barStyle="default" />
+      <ImageBackground
+        source={require("../assets/bg-front.jpg")}
+        resizeMode="cover"
+        style={imgStyle}
+      >
+        <ImageBackground
+          source={require("../assets/logo.png")}
+          resizeMode="cover"
+          style={logoStyle}
+        />
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+          style={inputStyle}
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+          secureTextEntry
+          style={inputStyle}
+        />
+        <TouchableOpacity style={buttonStye} onPress={handleLogin}>
+          <Text style={buttonTextStyle}>LOGIN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={buttonStye} onPress={handleRegister}>
+          <Text style={buttonTextStyle}>REGISTER</Text>
+        </TouchableOpacity>
+        <StatusBar barStyle="default" />
+      </ImageBackground>
     </View>
   );
+};
 
-}
-
-export default LoginScreen
+export default LoginScreen;
