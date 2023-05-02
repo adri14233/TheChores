@@ -20,7 +20,7 @@ import GroupsScreen from './components/GroupsScreen.tsx'
 import LeaderboardScreen from './components/LeaderboardScreen'
 import JoinGroupScreen from './components/JoinGroupScreen'
 import TasksScreen from './components/TasksScreen';
-import NewGroupScreen from './components/NewGroupScreen';
+import NewGroupScreen from './components/NewGroupScreen.tsx';
 
 
 
