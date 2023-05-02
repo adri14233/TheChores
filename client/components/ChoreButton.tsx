@@ -7,7 +7,7 @@ type ChoreButtonProps = {
     value: number,
 }
 
-const ChoreButton2Style : ViewStyle = {
+const choreButton2Style : ViewStyle = {
   flex: 1,
   width: '80%',
   flexDirection: 'row',
@@ -22,7 +22,7 @@ const ChoreButton2Style : ViewStyle = {
   borderColor: '#000'
 }
 
-const ChoreButtonTextStyle : TextStyle = {
+const choreButtonTextStyle : TextStyle = {
   width: '70%',
   textAlign: 'left',
   fontFamily: 'PressStart2P_400Regular',
@@ -47,8 +47,8 @@ const ChoreButton: React.FC<ChoreButtonProps> = ({ title, value = 0 }) => {
   }
 
   return (
-    <TouchableOpacity style={ChoreButton2Style} onPress={() => handlePress()}>
-      <Text style={ChoreButtonTextStyle}>{title}</Text>
+    <TouchableOpacity style={choreButton2Style} onPress={() => handlePress()}>
+      <Text style={choreButtonTextStyle}>{title}</Text>
       <Image
         source={{
           uri: "https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg",
