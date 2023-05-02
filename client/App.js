@@ -1,11 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, Alert, Image } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+
 import { useFonts, PressStart2P_400Regular } from '@expo-google-fonts/press-start-2p';
-import { NavigationContainer, useNavigation, useIsFocused } from "@react-navigation/native";
+import { NavigationContainer} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { useDispatch, useSelector } from 'react-redux';
 import { Provider } from 'react-redux';
 import { legacy_createStore } from 'redux';
 import loginReducer from './reducer';
@@ -462,7 +461,7 @@ export default function App() {
               title: 'THE CHORES',
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: 'black',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -478,7 +477,7 @@ export default function App() {
               title: 'NEW USER',
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: 'black',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -493,7 +492,7 @@ export default function App() {
             options={{
               title: 'CHORES',
               headerStyle: {
-                backgroundColor: '#f77b4d',
+                backgroundColor: 'black',
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -509,7 +508,7 @@ export default function App() {
               title: 'NEW TASK',
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: 'black'
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -525,7 +524,7 @@ export default function App() {
             options={{
               title: 'LEADERBOARD',
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: 'black'
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -541,7 +540,7 @@ export default function App() {
               title: 'YOUR GROUPS',
               headerLeft: null, // Remove the back button
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: 'black'
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -557,7 +556,7 @@ export default function App() {
               title: 'NEW GROUP',
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: 'black'
               },
               headerTintColor: '#fff',
               headerTitleStyle: {
@@ -573,7 +572,7 @@ export default function App() {
               title: 'JOIN GROUP',
               headerRight: null,
               headerStyle: {
-                backgroundColor: '#f77b4d'
+                backgroundColor: 'black'
               },
               headerTintColor: '#fff',
               headerTitleStyle: {

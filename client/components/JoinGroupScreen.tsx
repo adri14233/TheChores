@@ -8,7 +8,7 @@ import {
   Text,
   Alert,
   ViewStyle,
-  TextStyle,
+  TextStyle, ImageBackground
 } from "react-native";
 
 import { addUserToGroup } from "./APIService";
@@ -51,15 +51,16 @@ const JoinGroupScreen: React.FC = () => {
     backgroundColor: "#eee",
     borderRadius: 5,
     marginBottom: 10,
+    marginLeft: 40,
     fontSize: 18,
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     textAlign: "center",
   };
 
   const buttonTextStyle: TextStyle = {
-    color: "#ccc",
+    color: "black",
     fontSize: 20,
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     textAlign: "center",
   };
 
@@ -68,28 +69,40 @@ const JoinGroupScreen: React.FC = () => {
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 80,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
     borderColor: "#000",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     fontSize: 16,
-    color: "#000",
     textTransform: "uppercase",
   };
 
+  const imgStyle: ViewStyle = {
+    flex: 1,
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    marginTop: -100,
+  };
   return (
     <View style={containerStyle}>
-      <TextInput
-        placeholder="Group Name"
-        value={groupName}
-        onChangeText={(text) => setGroupName(text)}
-        style={inputStyle}
-      />
-      <TouchableOpacity style={buttonStyle} onPress={handlePress}>
-        <Text style={buttonTextStyle}>Join Group</Text>
-      </TouchableOpacity>
+      <ImageBackground
+        source={require("../assets/white-bg.jpg")}
+        resizeMode="cover"
+        style={imgStyle}
+      >
+        <TextInput
+          placeholder="Group Name"
+          value={groupName}
+          onChangeText={(text) => setGroupName(text)}
+          style={inputStyle}
+        />
+        <TouchableOpacity style={buttonStyle} onPress={handlePress}>
+          <Text style={buttonTextStyle}>Join Group</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
 }
