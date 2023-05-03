@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { getActions, getUsers } from "./APIService";
-import { View, Text, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import { View, Text, TouchableOpacity, ViewStyle, TextStyle, ImageBackground } from "react-native";
 
 const LeaderboardScreen = () => {
   const token = useSelector((state: any) => state.token);
@@ -75,39 +75,57 @@ const LeaderboardScreen = () => {
 
   const containerStyle: ViewStyle = {
     flex: 1,
-    backgroundColor: "#303030",
-    padding: 20,
   };
 
-  const leaderboardScreenAuxStyle: ViewStyle = {
-    backgroundColor: '#303030',
-    padding: 20
-  }
+const leaderboardButtonsStyle: ViewStyle = {
+  backgroundColor: "black",
+  flex: 0,
+  flexDirection: 'row',
+  justifyContent: "center"
+}
 
   const rowStyle: ViewStyle = {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginLeft: 10,
+    marginHorizontal: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    
+    backgroundColor: 'lightgrey'
+  };
+  const shadowProps: ViewStyle = {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 6,
   };
 
   const nameStyle: TextStyle = {
-    width: "53%",
+    width: "50%",
     fontSize: 18,
+    color: "pink",
     fontWeight: "bold",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
   };
 
   const scoreStyle: TextStyle = {
     width: "40%",
     fontSize: 18,
-    color: "#FFD700",
+    color: "black",
     fontWeight: "bold",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
   };
 
   const buttonStyle: TextStyle = {
-    backgroundColor: "#f3b78c",
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
@@ -116,49 +134,55 @@ const LeaderboardScreen = () => {
     justifyContent: "center",
     borderWidth: 2,
     borderColor: "#000",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     fontSize: 16,
     color: "#000",
     textTransform: "uppercase",
   };
 
   const buttonTextStyle: TextStyle = {
-    color: "#303030",
+    color: "black",
     fontSize: 20,
-    fontFamily: "PressStart2P_400Regular",
+    fontWeight: "900",
+    fontFamily: "sans-serif",
     textAlign: "center",
+  };
+
+  const imgStyle: ViewStyle = {
+    flex: 1,
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+    marginTop: -100,
   };
 
   return (
     <>
       <View style={containerStyle}>
-        {users.map((user, index) => (
-          <View key={user._id} style={rowStyle}>
-            <Text
-              style={[
-                nameStyle,
-                { color: index === 0 ? "#FFD700" : "#FFFFFF" },
-              ]}
-            >
-              {user.firstName}
-            </Text>
-            <Text style={scoreStyle}>Score: </Text>
-            <Text style={scoreStyle}>{user.score}</Text>
-          </View>
-        ))}
-      </View>
-      <View style={leaderboardScreenAuxStyle}>
-        <TouchableOpacity
-          style={buttonStyle}
-          onPress={() => handleAddTask()}
+        <ImageBackground
+          source={require("../assets/wall.jpg")}
+          resizeMode="cover"
+          style={imgStyle}
         >
+          {users.map((user, index) => (
+            <View key={user._id} style={[rowStyle, shadowProps]}>
+              <Text
+                style={[nameStyle, { color: index === 0 ? "black" : "blue" }]}
+              >
+                {user.firstName}
+              </Text>
+              <Text style={scoreStyle}>Score:</Text>
+              <Text style={scoreStyle}>{user.score}</Text>
+            </View>
+          ))}
+        </ImageBackground>
+      </View>
+      <View style={leaderboardButtonsStyle}>
+        <TouchableOpacity style={buttonStyle} onPress={() => handleAddTask()}>
           <Text style={buttonTextStyle}>ADD TASK</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={buttonStyle}
-          onPress={() => handleNewTask()}
-        >
-          <Text style={buttonTextStyle}>NEW TASK</Text>
+        <TouchableOpacity style={buttonStyle} onPress={() => handleNewTask()}>
+          <Text style={buttonTextStyle}>CREATE TASK</Text>
         </TouchableOpacity>
       </View>
     </>

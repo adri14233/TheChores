@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { View, TextInput, TouchableOpacity, Alert, Text, ViewStyle, TextStyle } from "react-native";
+import { View, TextInput, TouchableOpacity, Alert, Text, ViewStyle, TextStyle, ImageBackground } from "react-native";
 import { addGroup } from "./APIService";
 
 const loginContainerStyle: ViewStyle = {
@@ -17,9 +17,10 @@ const loginInputStyle: TextStyle = {
   borderColor: '#ccc',
   backgroundColor: '#eee',
   borderRadius: 5,
+  marginLeft: 40,
   marginBottom: 10,
   fontSize: 18,
-  fontFamily: 'PressStart2P_400Regular',
+  fontFamily: 'sans-serif',
   textAlign: 'center',
 }
 
@@ -28,7 +29,7 @@ const loginButtonStyle: ViewStyle = {
   borderRadius: 10,
   padding: 10,
   marginVertical: 10,
-  marginHorizontal: 20,
+  marginHorizontal: 80,
   alignItems: 'center',
   justifyContent: 'center',
   borderWidth: 2,
@@ -36,12 +37,20 @@ const loginButtonStyle: ViewStyle = {
 }
 
 const loginButtonTextStyle: TextStyle = {
-  color: '#ccc',
+  color: 'black',
   fontSize: 20,
-  fontFamily: 'PressStart2P_400Regular',
+  fontWeight: "900",
+  fontFamily: 'sans-serif',
   textAlign: 'center',
 }
 
+const imgStyle: ViewStyle = {
+  flex: 1,
+  justifyContent: "center",
+  width: "100%",
+  height: "100%",
+  marginTop: -100,
+};
 const NewGroupScreen : React.FC = () => {
 
   const [groupName, setGroupName] = useState("");
@@ -66,23 +75,29 @@ const NewGroupScreen : React.FC = () => {
 
   return (
     <View style={loginContainerStyle}>
-      <TextInput
-        placeholder="Group Name"
-        value={groupName}
-        onChangeText={(text) => setGroupName(text)}
-        style={loginInputStyle}
-      />
-      <TextInput
-        placeholder="Description"
-        value={groupDescription}
-        onChangeText={(text) => setGroupDescription(text)}
-        style={loginInputStyle}
-      />
-      <TouchableOpacity style={loginButtonStyle} onPress={handlePress}>
-        <Text style={loginButtonTextStyle}>Create Group</Text>
-      </TouchableOpacity>
+      <ImageBackground
+        source={require("../assets/white-bg.jpg")}
+        resizeMode="cover"
+        style={imgStyle}
+      >
+        <TextInput
+          placeholder="Group Name"
+          value={groupName}
+          onChangeText={(text) => setGroupName(text)}
+          style={loginInputStyle}
+        />
+        <TextInput
+          placeholder="Description"
+          value={groupDescription}
+          onChangeText={(text) => setGroupDescription(text)}
+          style={loginInputStyle}
+        />
+        <TouchableOpacity style={loginButtonStyle} onPress={handlePress}>
+          <Text style={loginButtonTextStyle}>Create Group</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </View>
-  )
+  );
 }
 
 export default NewGroupScreen;

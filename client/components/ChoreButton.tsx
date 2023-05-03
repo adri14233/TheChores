@@ -49,13 +49,8 @@ const ChoreButton: React.FC<ChoreButtonProps> = ({ title, value = 0 }) => {
   return (
     <TouchableOpacity style={choreButton2Style} onPress={() => handlePress()}>
       <Text style={choreButtonTextStyle}>{title}</Text>
-      <Image
-        source={{
-          uri: "https://images.assetsdelivery.com/compings_v2/bldekok/bldekok2108/bldekok210800013.jpg",
-        }}
-        style={{ width: 20, height: 20, marginLeft: 10 }}
-      />
-      <Text style={{ fontFamily: "PressStart2P_400Regular" }}>{value}</Text>
+   
+      <Text style={{ fontFamily: "sans-serif" }}>{value}</Text>
     </TouchableOpacity>
   );
 }
