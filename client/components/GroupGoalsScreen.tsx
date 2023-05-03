@@ -40,9 +40,9 @@ const GroupGoalsScreen: React.FC = () => {
     return usersData;
   }
 
-  function handlePress() {}
+  function handlePress() {
   navigation.navigate("New Goal" as never);
-
+  }
   return (
     <>
         {users &&

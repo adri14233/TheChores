@@ -14,7 +14,6 @@ export async function postAction(action, token) {
       },
       body: JSON.stringify(action),
     }).then((resp) => resp.json()));
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -51,10 +50,11 @@ export async function registerUser(user) {
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
-      .then((data) => { return data });
+      .then((data) => {
+        return data;
+      });
 
     return resp;
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -73,7 +73,6 @@ export async function postNewTask(task, token) {
 
     const data = await resp.json();
     return data;
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -83,13 +82,12 @@ export async function getUsers(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/users`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     const data = await resp.json();
     return data;
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -99,13 +97,12 @@ export async function getActions(token) {
   try {
     const resp = await fetch(`${ROOT_URL}/actions`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     const data = resp.json();
     return data;
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -121,7 +118,6 @@ export async function getGroups(token) {
 
     const data = await resp.json();
     return JSON.parse(data.message);
-
   } catch (err) {
     throw new Error(err);
   }
@@ -136,11 +132,10 @@ export async function addGroup(token, group) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(group),
-    })
+    });
 
     const data = await resp.json();
     return data;
-
   } catch (err) {
     throw new Error(err.message);
   }
@@ -149,17 +144,16 @@ export async function addGroup(token, group) {
 export async function addUserToGroup(token, groupName) {
   try {
     const resp = await fetch(`${ROOT_URL}/group/member`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name: groupName })
-    })
+      body: JSON.stringify({ name: groupName }),
+    });
 
     const data = await resp.json();
     return data;
-
   } catch (err) {
     throw new Error(err);
   }
@@ -169,7 +163,7 @@ export async function getChores(token) {
   try {
     const response = await fetch(`${ROOT_URL}/chores`, {
       headers: {
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -177,7 +171,6 @@ export async function getChores(token) {
 
     const chores = await response.json();
     return JSON.parse(chores.message);
-
   } catch (err) {
     throw new Error(err);
   }
@@ -196,23 +189,24 @@ export async function postChore(action, token) {
 
     const data = await resp.json();
 
-    if (data.message.includes("Action succesfully saved")) Alert.alert("Chore succesfully added!");
-
+    if (data.message.includes("Action succesfully saved"))
+      Alert.alert("Chore succesfully added!");
   } catch (err) {
     throw new Error(err.message);
   }
 }
 
-export async function postGoal(goal){
-try {
-  const resp = await fetch(`${ROOT_URL}/goal`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(goal)
-  })
-} catch (error) {
-  
-}
+export async function postGoal(goal) {
+  try {
+    const resp = await fetch(`${ROOT_URL}/goal`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(goal),
+    });
+    return (resp = await resp.json());
+  } catch (error) {
+    throw new Error(err.message);
+  }
 }

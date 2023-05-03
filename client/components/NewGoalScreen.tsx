@@ -6,7 +6,8 @@ import {
   View,
   ImageBackground,
   ViewStyle,
-  Alert
+  Alert,
+  TextStyle,
 } from "react-native";
 import { postGoal } from "./APIService";
 
@@ -16,24 +17,64 @@ const NewGoalScreen: React.FC = () => {
   const [description, setDescription] = useState("");
   const [frequency, setFrequency] = useState("");
 
-
-async function handlePress() {
+  async function handlePress() {
     const goal = {
-        name: goalName,
-        description: description,
-        frequency: frequency,
-        member: memberName
-    }
+      name: goalName,
+      description: description,
+      frequency: frequency,
+      member: memberName,
+    };
     try {
-        const data = await postGoal(goal);
-        
-        if(data.message.includes("Goal succesfully created!"))
-        Alert.alert(`${goalName} goal succesfully created!`)
-    } catch (error:any) {
-        throw new Error(error.message)
-    }
-}
+      const data = await postGoal(goal);
 
+      if (data.message.includes("Goal succesfully created!"))
+        Alert.alert(`${goalName} goal succesfully created!`);
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+  const containerStyle: ViewStyle = {
+    flex: 1,
+    backgroundColor: "#303030",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+  const inputStyle: TextStyle = {
+    width: "80%",
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#eee",
+    borderRadius: 5,
+    marginBottom: 10,
+    marginLeft: 40,
+    fontSize: 18,
+    fontFamily: "sans-serif",
+    textAlign: "center",
+  };
+
+  const buttonsStyle: TextStyle = {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    marginHorizontal: 80,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: "#000",
+    fontFamily: "sans-serif",
+    fontSize: 16,
+    color: "#000",
+    textTransform: "uppercase",
+  };
+   const buttonTestStyle: TextStyle = {
+     color: "black",
+     fontWeight: "900",
+     fontSize: 20,
+     fontFamily: "sans-serif",
+     textAlign: "center",
+   };
 
   const imgStyle: ViewStyle = {
     flex: 1,
@@ -43,7 +84,7 @@ async function handlePress() {
   };
 
   return (
-    <View>
+    <View style={containerStyle}>
       <ImageBackground
         source={require("../assets/white-bg.jpg")}
         resizeMode="cover"
@@ -53,25 +94,29 @@ async function handlePress() {
           placeholder="Member Name"
           value={memberName}
           onChangeText={(text) => setMemberName(text)}
+          style={inputStyle}
         ></TextInput>
         <TextInput
           placeholder="Goal Name"
           value={goalName}
           onChangeText={(text) => setGoalName(text)}
+          style={inputStyle}
         ></TextInput>
         <TextInput
-          placeholder="Goal Name"
+          placeholder="Description"
           value={description}
           onChangeText={(text) => setDescription(text)}
+          style={inputStyle}
         ></TextInput>
         <TextInput
           placeholder="how often?"
           value={frequency}
+          style={inputStyle}
           keyboardType="numeric"
           onChangeText={(text) => setFrequency(text)}
         ></TextInput>
-        <TouchableOpacity onPress={handlePress}>
-          <Text>Create Goal</Text>
+        <TouchableOpacity style={buttonsStyle} onPress={handlePress}>
+          <Text style={buttonTestStyle}>Create Goal</Text>
         </TouchableOpacity>
       </ImageBackground>
     </View>
