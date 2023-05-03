@@ -19,6 +19,7 @@ import TasksScreen from './components/TasksScreen.tsx';
 import NewGroupScreen from './components/NewGroupScreen.tsx';
 import GroupGoalsScreen from './components/GroupGoalsScreen.tsx';
 import NewGoalScreen from './components/NewGoalScreen';
+import UserGoalDetails from './components/UserGoalDetails';
 
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="New Goal">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
             name="Login"
             component={LoginScreen}
@@ -178,14 +179,29 @@ export default function App() {
             name="Group Goals"
             component={GroupGoalsScreen}
             options={{
-              title: 'GROUP GOALS',
+              title: "GROUP GOALS",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black',
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="User Goal Details"
+            component={UserGoalDetails}
+            options={{
+              title: "GOAL DETAILS",
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: "black",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
               },
             }}
           />

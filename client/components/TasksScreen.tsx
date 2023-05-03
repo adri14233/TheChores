@@ -54,6 +54,7 @@ const TasksScreen: React.FC = () => {
 
   useEffect(() => {
     getChores(token).then((choreList) => setChores(choreList));
+  
   }, [isFocused, token]);
 
   return (
