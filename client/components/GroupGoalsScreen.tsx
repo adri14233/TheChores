@@ -80,6 +80,7 @@ const GroupGoalsScreen: React.FC = () => {
     return usersData;
   }
 
+
   function handleNewGoal () {
     navigation.navigate("New Goal" as never);
   }
@@ -87,6 +88,7 @@ const GroupGoalsScreen: React.FC = () => {
   function handleUserGoals () {
     navigation.navigate("User Goals" as never);
   }
+
 
   return (
     <>
