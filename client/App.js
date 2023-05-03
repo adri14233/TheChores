@@ -17,6 +17,7 @@ import LeaderboardScreen from './components/LeaderboardScreen.tsx';
 import JoinGroupScreen from './components/JoinGroupScreen.tsx';
 import TasksScreen from './components/TasksScreen.tsx';
 import NewGroupScreen from './components/NewGroupScreen.tsx';
+import GroupGoalsScreen from './components/GroupGoalsScreen.tsx';
 
 
 export default function App() {
@@ -154,6 +155,21 @@ export default function App() {
               headerTitleStyle: {
                 fontWeight: 'bold',
                 fontFamily: 'sans-serif'
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Group Goals"
+            component={GroupGoalsScreen}
+            options={{
+              title: 'THE CHORES',
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: 'black',
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
               },
             }}
           />
