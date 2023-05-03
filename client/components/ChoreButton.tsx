@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { TouchableOpacity, Text, Image, ViewStyle, TextStyle } from "react-native";
 import { postChore } from "./APIService";
+import { useNavigation } from "@react-navigation/native";
 
 type ChoreButtonProps = {
     title: string,
@@ -31,8 +32,10 @@ const choreButtonTextStyle : TextStyle = {
 }
 
 const ChoreButton: React.FC<ChoreButtonProps> = ({ title, value = 0 }) => {
+
   const token = useSelector((state: any) => state.token);
   const group = useSelector((state: any) => state.group);
+  const navigation = useNavigation();
 
   async function handlePress() {
     const action = {
@@ -44,6 +47,7 @@ const ChoreButton: React.FC<ChoreButtonProps> = ({ title, value = 0 }) => {
     };
 
     postChore(action, token);
+    navigation.navigate('Leaderboard' as never);
   }
 
   return (

@@ -127,7 +127,7 @@ export async function getGroups(token) {
   }
 }
 
-export async function addGroup(token, group) {s
+export async function addGroup(token, group) {
   try {
     const resp = await fetch(`${ROOT_URL}/group`, {
       method: "POST",

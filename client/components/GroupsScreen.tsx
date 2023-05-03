@@ -57,7 +57,7 @@ const groupsScreenLoginButtonText2: TextStyle = {
   color: "black",
   fontSize: 20,
 
-  fontFamily: "sans-serif",
+  // fontFamily: "sans-serif",
   textAlign: "center",
 };
 const imgStyle: ViewStyle = {

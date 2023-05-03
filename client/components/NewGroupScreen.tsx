@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { View, TextInput, TouchableOpacity, Alert, Text, ViewStyle, TextStyle } from "react-native";
-import { addGroup } from "./APIService";
+import { addGroup, addUserToGroup } from "./APIService";
+import { useNavigation } from "@react-navigation/native";
 
 const loginContainerStyle: ViewStyle = {
   flex: 1,
@@ -47,6 +48,7 @@ const NewGroupScreen : React.FC = () => {
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const token = useSelector((state : any) => state.token);
+  const navigation = useNavigation();
 
   async function handlePress () {
 
@@ -58,7 +60,11 @@ const NewGroupScreen : React.FC = () => {
     try {
       const data = await addGroup(token, group);
       if (data.message === 'Group already exists!') Alert.alert('Group already exists!');
-      if (data.message.includes('Group succesfully created')) Alert.alert(`${groupName} group succesfully created!`);
+      if (data.message.includes('Group succesfully created')) {
+        await addUserToGroup(token, groupName);
+        Alert.alert(`${groupName} group succesfully created!`);
+      }
+      navigation.navigate('Groups' as never);
     } catch (err : any) {
       Alert.alert("Error", err.message);
     }
