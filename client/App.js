@@ -22,9 +22,9 @@ import NewGroupScreen from './components/NewGroupScreen.tsx';
 export default function App() {
 
   const Stack = createStackNavigator();
-  const [fontsLoaded] = useFonts({ PressStart2P_400Regular });
+  // const [fontsLoaded] = useFonts({ sans-serif});
 
-  if (!fontsLoaded) return null;
+  // if (!fontsLoaded) return null;
 
   return (
     <Provider store={store}>
@@ -42,7 +42,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -58,7 +58,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -73,7 +73,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -89,7 +89,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular',
+                fontFamily: 'sans-serif',
                 textAlign: 'center'
               },
             }}
@@ -105,7 +105,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -121,7 +121,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -137,7 +137,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
@@ -153,7 +153,7 @@ export default function App() {
               headerTintColor: '#fff',
               headerTitleStyle: {
                 fontWeight: 'bold',
-                fontFamily: 'PressStart2P_400Regular'
+                fontFamily: 'sans-serif'
               },
             }}
           />
