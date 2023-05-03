@@ -56,8 +56,8 @@ const groupsScreenLoginButton2: ViewStyle = {
 const groupsScreenLoginButtonText2: TextStyle = {
   color: "black",
   fontSize: 20,
-
-  // fontFamily: "sans-serif",
+  fontWeight: "900",
+  fontFamily: "sans-serif",
   textAlign: "center",
 };
 const imgStyle: ViewStyle = {
@@ -68,6 +68,17 @@ const imgStyle: ViewStyle = {
   marginTop: -100,
 };
 
+const shadowProps: ViewStyle = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+
+  elevation: 6,
+};
 
 const BottomStyle: ViewStyle = {
   backgroundColor: "black",
@@ -115,7 +126,7 @@ const GroupsScreen: React.FC = () => {
           {groups.map((group) => (
             <TouchableOpacity
               key={group._id}
-              style={groupsScreenGroupContainerStyle}
+              style={[groupsScreenGroupContainerStyle, shadowProps]}
               onPress={() => onPress(group)}
             >
               <Text style={groupsScreenGroupTitleStyle}>{group.name}</Text>

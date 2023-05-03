@@ -56,6 +56,7 @@ const LoginScreen: React.FC = () => {
   const buttonTextStyle: TextStyle = {
     color: "black",
     fontSize: 20,
+    fontWeight: "900",
     fontFamily: "sans-serif",
     textAlign: "center",
   };

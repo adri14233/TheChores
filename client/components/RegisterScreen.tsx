@@ -42,11 +42,12 @@ const loginButtonStyle: ViewStyle = {
 }
 
 const loginButtonTextStyle: TextStyle = {
-  color: 'black',
+  color: "black",
   fontSize: 20,
-  fontFamily: 'sans-serif',
-  textAlign: 'center',
-}
+  fontWeight: "900",
+  fontFamily: "sans-serif",
+  textAlign: "center",
+};
   const imgStyle: ViewStyle = {
     flex: 1,
     justifyContent: "center",

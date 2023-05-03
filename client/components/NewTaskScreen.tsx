@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { View, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+  Text,
+  Alert,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 import { postNewTask } from "./APIService";
 import { useNavigation } from "@react-navigation/native";
 
 const NewTaskScreen: React.FC = () => {
-
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskValue, setTaskValue] = useState("");
@@ -47,8 +55,9 @@ const NewTaskScreen: React.FC = () => {
     backgroundColor: "#eee",
     borderRadius: 5,
     marginBottom: 10,
+    marginLeft: 40,
     fontSize: 18,
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     textAlign: "center",
   };
 
@@ -57,49 +66,64 @@ const NewTaskScreen: React.FC = () => {
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 80,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 2,
     borderColor: "#000",
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     fontSize: 16,
     color: "#000",
     textTransform: "uppercase",
   };
 
   const buttonTestStyle: TextStyle = {
-    color: "#ccc",
+    color: "black",
+    fontWeight: "900",
     fontSize: 20,
-    fontFamily: "PressStart2P_400Regular",
+    fontFamily: "sans-serif",
     textAlign: "center",
   };
 
+    const imgStyle: ViewStyle = {
+      flex: 1,
+      justifyContent: "center",
+      width: "100%",
+      height: "100%",
+      marginTop: -100,
+    };
+
   return (
     <View style={containerStyle}>
-      <TextInput
-        placeholder="Task Name"
-        value={taskName}
-        onChangeText={(text) => setTaskName(text)}
-        style={inputStyle}
-      />
-      <TextInput
-        placeholder="Description"
-        value={taskDescription}
-        onChangeText={(text) => setTaskDescription(text)}
-        style={inputStyle}
-      />
-      <TextInput
-        placeholder="Value points of this task"
-        value={taskValue}
-        onChangeText={(text) => setTaskValue(text)}
-        style={inputStyle}
-      />
-      <TouchableOpacity style={buttonsStyle} onPress={handlePress}>
-        <Text style={buttonTestStyle}>Create Task</Text>
-      </TouchableOpacity>
+      <ImageBackground
+        source={require("../assets/white-bg.jpg")}
+        resizeMode="cover"
+        style={imgStyle}
+      >
+        <TextInput
+          placeholder="Task Name"
+          value={taskName}
+          onChangeText={(text) => setTaskName(text)}
+          style={inputStyle}
+        />
+        <TextInput
+          placeholder="Description"
+          value={taskDescription}
+          onChangeText={(text) => setTaskDescription(text)}
+          style={inputStyle}
+        />
+        <TextInput
+          placeholder="Value points of this task"
+          value={taskValue}
+          onChangeText={(text) => setTaskValue(text)}
+          style={inputStyle}
+        />
+        <TouchableOpacity style={buttonsStyle} onPress={handlePress}>
+          <Text style={buttonTestStyle}>Create Task</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </View>
   );
-}
+};
 
 export default NewTaskScreen;
