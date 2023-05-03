@@ -178,7 +178,7 @@ export default function App() {
             name="Group Goals"
             component={GroupGoalsScreen}
             options={{
-              title: 'THE CHORES',
+              title: 'GROUP GOALS',
               headerRight: null,
               headerStyle: {
                 backgroundColor: 'black',

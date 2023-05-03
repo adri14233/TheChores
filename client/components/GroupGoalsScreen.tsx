@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getUsers } from "./APIService";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -11,6 +11,46 @@ interface IUser {
   lastName: string;
   score: number;
 }
+
+const rowStyle: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+  marginLeft: 10,
+  marginHorizontal: 10,
+  paddingHorizontal: 20,
+  paddingVertical: 10,
+  borderRadius: 10,
+
+  backgroundColor: "lightgrey",
+};
+const shadowProps: ViewStyle = {
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+
+  elevation: 6,
+};
+
+const nameStyle: TextStyle = {
+  width: "50%",
+  fontSize: 18,
+  color: "pink",
+  fontWeight: "bold",
+  fontFamily: "sans-serif",
+};
+
+const scoreStyle: TextStyle = {
+  width: "40%",
+  fontSize: 18,
+  color: "black",
+  fontWeight: "bold",
+  fontFamily: "sans-serif",
+};
 
 const GroupGoalsScreen: React.FC = () => {
   const token = useSelector((state: any) => state.token);
@@ -40,16 +80,34 @@ const GroupGoalsScreen: React.FC = () => {
     return usersData;
   }
 
-  function handlePress() {
-  navigation.navigate("New Goal" as never);
+
+  function handleNewGoal () {
+    navigation.navigate("New Goal" as never);
   }
+
+  function handleUserGoals () {
+    navigation.navigate("User Goals" as never);
+  }
+
+
   return (
     <>
-        {users &&
-          users.length > 0 &&
-        users.map((user, i) => <Text>{user.firstName}</Text>)}
+      <View style={[{gap: 10, paddingTop: 20}]}>
+        {users.map((user, index) => (
+          <TouchableOpacity 
+          key={user._id} style={[rowStyle, shadowProps]}
+          onPress={() => handleUserGoals()}
+          >
+            <Text
+              style={[nameStyle, { color: index === 0 ? "black" : "blue" }]}
+            >
+              {user.firstName}
+            </Text>
+          </TouchableOpacity>
+        ))}
         <View>
-        <TouchableOpacity onPress={handlePress}>
+        </View>
+        <TouchableOpacity onPress={() => handleNewGoal()}>
           <Text>Create Goal</Text>
         </TouchableOpacity>
       </View>
