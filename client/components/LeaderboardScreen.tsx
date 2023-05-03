@@ -2,7 +2,14 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { getActions, getUsers } from "./APIService";
-import { View, Text, TouchableOpacity, ViewStyle, TextStyle, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+  TextStyle,
+  ImageBackground,
+} from "react-native";
 
 const LeaderboardScreen = () => {
   const token = useSelector((state: any) => state.token);
@@ -22,7 +29,9 @@ const LeaderboardScreen = () => {
     try {
       usersData = await getUsers(token);
       usersData = JSON.parse(usersData.message);
-      usersData = usersData.filter((user: any) => group.members.includes(user._id));
+      usersData = usersData.filter((user: any) =>
+        group.members.includes(user._id)
+      );
     } catch (err: any) {
       throw new Error(err.message);
     }
@@ -72,17 +81,20 @@ const LeaderboardScreen = () => {
     navigation.navigate("New Task" as never);
   };
 
+  const handleGoals = () => {
+    navigation.navigate("Group Goals" as never);
+  };
 
   const containerStyle: ViewStyle = {
     flex: 1,
   };
 
-const leaderboardButtonsStyle: ViewStyle = {
-  backgroundColor: "black",
-  flex: 0,
-  flexDirection: 'row',
-  justifyContent: "center"
-}
+  const leaderboardButtonsStyle: ViewStyle = {
+    backgroundColor: "black",
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+  };
 
   const rowStyle: ViewStyle = {
     flexDirection: "row",
@@ -93,8 +105,8 @@ const leaderboardButtonsStyle: ViewStyle = {
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
-    
-    backgroundColor: 'lightgrey'
+
+    backgroundColor: "lightgrey",
   };
   const shadowProps: ViewStyle = {
     shadowColor: "#000",
@@ -184,9 +196,12 @@ const leaderboardButtonsStyle: ViewStyle = {
         <TouchableOpacity style={buttonStyle} onPress={() => handleNewTask()}>
           <Text style={buttonTextStyle}>CREATE TASK</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={buttonStyle} onPress={() => handleGoals()}>
+          <Text style={buttonTextStyle}>GOALS</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
-}
+};
 
 export default LeaderboardScreen;
