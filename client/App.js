@@ -18,6 +18,7 @@ import JoinGroupScreen from './components/JoinGroupScreen.tsx';
 import TasksScreen from './components/TasksScreen.tsx';
 import NewGroupScreen from './components/NewGroupScreen.tsx';
 import GroupGoalsScreen from './components/GroupGoalsScreen.tsx';
+import NewGoalScreen from './components/NewGoalScreen';
 
 
 export default function App() {
