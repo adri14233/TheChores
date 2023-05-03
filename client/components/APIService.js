@@ -203,4 +203,16 @@ export async function postChore(action, token) {
   }
 }
 
-
+export async function postGoal(goal){
+try {
+  const resp = await fetch(`${ROOT_URL}/goal`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(goal)
+  })
+} catch (error) {
+  
+}
+}
