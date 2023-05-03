@@ -21,6 +21,7 @@ const NewTaskScreen: React.FC = () => {
   const navigation = useNavigation();
 
   async function handlePress() {
+    console.log(token);
     const task = {
       name: taskName,
       description: taskDescription,

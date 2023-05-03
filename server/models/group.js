@@ -13,6 +13,7 @@ const groupSchema = mongoose.Schema({
     type: [String],
     required: true,
   },
+ 
 });
 
 module.exports = mongoose.model('Group', groupSchema);

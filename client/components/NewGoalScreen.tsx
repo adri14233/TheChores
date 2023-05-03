@@ -10,25 +10,33 @@ import {
   TextStyle,
 } from "react-native";
 import { postGoal } from "./APIService";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const NewGoalScreen: React.FC = () => {
   const [goalName, setGoalName] = useState("");
   const [memberName, setMemberName] = useState("");
   const [description, setDescription] = useState("");
   const [frequency, setFrequency] = useState("");
+  const navigation = useNavigation();
+  const token = useSelector((state: any) => state.token);
 
   async function handlePress() {
-    const goal = {
-      name: goalName,
-      description: description,
-      frequency: frequency,
-      member: memberName,
-    };
+      const goal = {
+          name: goalName,
+          description: description,
+          frequency: frequency,
+          member: memberName,
+        };
+        
+      
     try {
-      const data = await postGoal(goal);
+      const data = await postGoal(goal, token);
 
-      if (data.message.includes("Goal succesfully created!"))
+      if (data.message.includes("Goal succesfully created!")) {
         Alert.alert(`${goalName} goal succesfully created!`);
+        navigation.navigate("User Goal Details" as never);
+      }
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -68,13 +76,13 @@ const NewGoalScreen: React.FC = () => {
     color: "#000",
     textTransform: "uppercase",
   };
-   const buttonTestStyle: TextStyle = {
-     color: "black",
-     fontWeight: "900",
-     fontSize: 20,
-     fontFamily: "sans-serif",
-     textAlign: "center",
-   };
+  const buttonTestStyle: TextStyle = {
+    color: "black",
+    fontWeight: "900",
+    fontSize: 20,
+    fontFamily: "sans-serif",
+    textAlign: "center",
+  };
 
   const imgStyle: ViewStyle = {
     flex: 1,
