@@ -35,15 +35,15 @@ export default function App() {
             name="Login"
             component={LoginScreen}
             options={{
-              title: 'THE CHORES',
+              title: "THE CHORES",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black',
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
@@ -51,110 +51,125 @@ export default function App() {
             name="Register"
             component={RegisterScreen}
             options={{
-              title: 'NEW USER',
+              title: "NEW USER",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black',
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
           <Stack.Screen
-            name="Tasks" 
-            component={TasksScreen} 
+            name="Tasks"
+            component={TasksScreen}
             options={{
-              title: 'CHORES',
+              title: "CHORES",
               headerStyle: {
-                backgroundColor: 'black',
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
           <Stack.Screen
-            name='New Task'
+            name="New Task"
             component={NewTaskScreen}
             options={{
-              title: 'NEW TASK',
+              title: "NEW TASK",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black'
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif',
-                textAlign: 'center'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
+                textAlign: "center",
               },
             }}
           />
-          <Stack.Screen 
-            name='Leaderboard'
+          <Stack.Screen
+            name="Leaderboard"
             component={LeaderboardScreen}
             options={{
-              title: 'LEADERBOARD',
+              title: "LEADERBOARD",
               headerStyle: {
-                backgroundColor: 'black'
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
           <Stack.Screen
-            name='Groups'
+            name="Groups"
             component={GroupsScreen}
             options={{
-              title: 'YOUR GROUPS',
+              title: "YOUR GROUPS",
               headerLeft: null, // Remove the back button
               headerStyle: {
-                backgroundColor: 'black'
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
           <Stack.Screen
-            name='New Group'
+            name="New Group"
             component={NewGroupScreen}
             options={{
-              title: 'NEW GROUP',
+              title: "NEW GROUP",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black'
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
           <Stack.Screen
-            name='Join Group'
+            name="Join Group"
             component={JoinGroupScreen}
             options={{
-              title: 'JOIN GROUP',
+              title: "JOIN GROUP",
               headerRight: null,
               headerStyle: {
-                backgroundColor: 'black'
+                backgroundColor: "black",
               },
-              headerTintColor: '#fff',
+              headerTintColor: "#fff",
               headerTitleStyle: {
-                fontWeight: 'bold',
-                fontFamily: 'sans-serif'
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="New Goal"
+            component={NewGoalScreen}
+            options={{
+              title: "NEW GOAL",
+              headerStyle: {
+                backgroundColor: "black",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+                fontFamily: "sans-serif",
               },
             }}
           />
@@ -174,7 +189,7 @@ export default function App() {
             }}
           />
         </Stack.Navigator>
-        <StatusBar style="light" backgroundColor="blue"/>
+        <StatusBar style="light" backgroundColor="blue" />
       </NavigationContainer>
     </Provider>
   );
