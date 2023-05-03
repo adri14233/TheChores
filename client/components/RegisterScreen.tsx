@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { View, ImageBackground, TextInput, TouchableOpacity, Text, Alert, ViewStyle, TextStyle } from "react-native";
-import { registerUser } from "./APIService";
+import { registerUser, getLogin } from "./APIService";
+import { useDispatch } from "react-redux";
 
 const loginContainerStyle: ViewStyle = {
   flex: 1,
@@ -62,6 +63,7 @@ const RegisterScreen: React.FC = () => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   async function handleRegister() {
@@ -76,13 +78,33 @@ const RegisterScreen: React.FC = () => {
 
     if (data.message === "User already exists!")
       Alert.alert("User already exists!");
-    if (data.message.includes("User succesfully created"))
+    if (data.message.includes("User succesfully created")) {
       Alert.alert(`${firstName} ${lastName} user succesfully created!`);
+      await autoLogIn(email, password);
+    }
   }
 
   function handleLogin() {
     navigation.navigate("Login" as never);
   }
+
+  const autoLogIn = async (email : string, password : string) => {
+    const creds = {
+      username: email,
+      password: password
+    };
+
+    try {
+      const data = await getLogin(creds);
+      const token = data.token;
+      dispatch({ type: "SET_EMAIL", payload: email });
+      dispatch({ type: "SET_PASSWORD", payload: password });
+      dispatch({ type: "SET_TOKEN", payload: token });
+      navigation.navigate("Groups" as never);
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
   return (
     <View style={loginContainerStyle}>

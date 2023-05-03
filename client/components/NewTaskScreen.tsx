@@ -11,12 +11,14 @@ import {
   TextStyle,
 } from "react-native";
 import { postNewTask } from "./APIService";
+import { useNavigation } from "@react-navigation/native";
 
 const NewTaskScreen: React.FC = () => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [taskValue, setTaskValue] = useState("");
   const token = useSelector((state: any) => state.token);
+  const navigation = useNavigation();
 
   async function handlePress() {
     const task = {
@@ -30,8 +32,10 @@ const NewTaskScreen: React.FC = () => {
 
       if (data.message === "Chore already exists!")
         Alert.alert("Chore already exists!");
-      if (data.message.includes("Chore succesfully created"))
+      if (data.message.includes("Chore succesfully created")) {
         Alert.alert(`${taskName} task succesfully created!`);
+        navigation.navigate('Leaderboard' as never);
+      }
     } catch (err: any) {
       throw new Error(err.message);
     }
