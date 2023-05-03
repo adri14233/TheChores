@@ -18,7 +18,7 @@ const {
   getUserActions,
   getUserActionsInGroup,
 } = require("./controllers/action");
-const  postGoal  = require("./controllers/goal");
+const  {postGoal, getGoals}  = require("./controllers/goal");
 const { getLogin } = require("./utils/auth");
 
 router.get("/user/:id", getUser);
@@ -43,5 +43,6 @@ router.get("/user/:userId/group/:groupId/actions", getUserActionsInGroup);
 router.post("/login", getLogin);
 
 router.post("/goal", postGoal);
+router.get("/goals", getGoals);
 
 module.exports = router;
