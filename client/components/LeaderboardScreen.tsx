@@ -81,8 +81,8 @@ const LeaderboardScreen = () => {
     navigation.navigate("New Task" as never);
   };
 
-  const handleGoals = () => {
-    navigation.navigate("Group Goals" as never);
+  const handleGroupGoals = () => {
+    navigation.navigate('Group Goals' as never);
   };
 
   const containerStyle: ViewStyle = {
@@ -196,7 +196,7 @@ const LeaderboardScreen = () => {
         <TouchableOpacity style={buttonStyle} onPress={() => handleNewTask()}>
           <Text style={buttonTextStyle}>CREATE TASK</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={buttonStyle} onPress={() => handleGoals()}>
+        <TouchableOpacity style={buttonStyle} onPress={() => handleGroupGoals()}>
           <Text style={buttonTextStyle}>GOALS</Text>
         </TouchableOpacity>
       </View>
