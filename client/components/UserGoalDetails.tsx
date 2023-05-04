@@ -50,7 +50,7 @@ const UserGoalDetails: React.FC<goalProps> = ({ name, desc, freq }) => {
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
-    justifyContent: "center",
+    justifyContent: "space-between",
     fontFamily: "sans-serif",
     fontWeight: "900",
     width: "100%",
@@ -99,7 +99,7 @@ const UserGoalDetails: React.FC<goalProps> = ({ name, desc, freq }) => {
         style={choreButton2Style}
         onPress={() => setIsToggled(!isToggled)}
       >
-        <Text style={goalsListStyle}>{name}</Text>
+        <Text style={goalsListStyle}>{name}<Text> {" ("}{isChecked.filter(el => el).length} / {isChecked.length}{") "}</Text></Text>
         {isToggled && 
         frequency.map((el, index) => (
           <View style={row}>
