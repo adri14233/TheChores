@@ -17,8 +17,9 @@ const postGoal = async (ctx) => {
     ctx.body = { message: `Could not create goal!` };
   }
 };
+
 const getGoals = async (ctx) => {
-    console.log(auth(ctx))
+  console.log(auth(ctx))
   const decodedToken = auth(ctx);
 
   if (decodedToken) {
@@ -33,5 +34,28 @@ const getGoals = async (ctx) => {
     }
   }
 };
+
+const postUserToGoal = async (ctx) => {
+  const decodedToken = auth(ctx);
+
+  if (decodedToken) {
+    try {
+      const goals = await goalModel.find();
+      let goal = goals.filter(goal => goal.name === ctx.request.body.name);
+
+      if (ctx.request.body.name === '' | goal.length === 0) throw new Error('Goal does not exist!');
+
+      goal = goal[0];
+      if (goal.member === decodedToken.userId) throw new Error('Goal already assigned to user!');
+
+      goal.member = decodedToken.userId;
+      await goalModel.findByIdAndUpdate(goal._id, {member: goal.member});
+      ctx.body = { message: `User \n ${decodedToken.userId}\n succesfully added to Goal \n ${ctx.request.body.name}` };
+    } catch (err) {
+      ctx.status = 400;
+      ctx.body = { message: JSON.stringify(err.message)};
+    }
+  }
+}
 
 module.exports = { postGoal, getGoals };
