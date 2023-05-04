@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "./APIService";
-import { View, TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -51,28 +57,28 @@ const scoreStyle: TextStyle = {
   fontWeight: "bold",
   fontFamily: "sans-serif",
 };
- const buttonTestStyle: TextStyle = {
-   color: "black",
-   fontWeight: "900",
-   fontSize: 20,
-   fontFamily: "sans-serif",
-   textAlign: "center",
- };
- const buttonsStyle: TextStyle = {
-   backgroundColor: "#fff",
-   borderRadius: 10,
-   padding: 10,
-   marginVertical: 10,
-   marginHorizontal: 80,
-   alignItems: "center",
-   justifyContent: "center",
-   borderWidth: 2,
-   borderColor: "#000",
-   fontFamily: "sans-serif",
-   fontSize: 16,
-   color: "#000",
-   textTransform: "uppercase",
- };
+const buttonTestStyle: TextStyle = {
+  color: "black",
+  fontWeight: "900",
+  fontSize: 20,
+  fontFamily: "sans-serif",
+  textAlign: "center",
+};
+const buttonsStyle: TextStyle = {
+  backgroundColor: "#fff",
+  borderRadius: 10,
+  padding: 10,
+  marginVertical: 10,
+  marginHorizontal: 80,
+  alignItems: "center",
+  justifyContent: "center",
+  borderWidth: 2,
+  borderColor: "#000",
+  fontFamily: "sans-serif",
+  fontSize: 16,
+  color: "#000",
+  textTransform: "uppercase",
+};
 
 const GroupGoalsScreen: React.FC = () => {
   const token = useSelector((state: any) => state.token);
@@ -103,16 +109,14 @@ const GroupGoalsScreen: React.FC = () => {
     return usersData;
   }
 
-
-  
-
-
-  function handleUserGoals (firstName: string) {
-    dispatch({ type: 'SET_USER', payload: firstName});
-    navigation.navigate("User Goals" as never);
-
+  function handleNewGoal() {
+    navigation.navigate("New Goal" as never);
   }
 
+  function handleUserGoals(firstName: string) {
+    dispatch({ type: "SET_USER", payload: firstName });
+    navigation.navigate("User Goals" as never);
+  }
 
   return (
     <>

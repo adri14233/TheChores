@@ -1,13 +1,23 @@
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity, ViewStyle, TextStyle } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ViewStyle,
+  TextStyle,
+  ScrollView,
+  ImageBackground
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getGoals } from "./APIService";
+import UserGoalDetails from "./UserGoalDetails";
 
 interface IGoal {
-  _id: string,
-  name: string,
-  frequency: number
+  _id: string;
+  name: string;
+  frequency: number;
+  description: string
 }
 
 const rowStyle: ViewStyle = {
@@ -41,15 +51,33 @@ const nameStyle: TextStyle = {
   fontWeight: "bold",
   fontFamily: "sans-serif",
 };
+const choresListStyle: TextStyle = {
+  flex: 1,
+  alignItems: "center",
+  justifyContent: "center",
+  fontFamily: "sans-serif",
+  height: "100%",
+};
+const containerStyle: ViewStyle = {
+  backgroundColor: "white",
+  height: "100%",
+};
+const imgBGStyle: ViewStyle = {
+  flex: 1,
+  justifyContent: "center",
+  width: "100%",
+  height: "100%",
+};
+
 
 const UserGoalsScreen: React.FC = () => {
-
   const [goals, setGoals] = useState([] as unknown as IGoal[]);
   const isFocused = useIsFocused();
   const token = useSelector((state: any) => state.token);
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  
 
   useEffect(() => {
     handleLoad();
@@ -60,26 +88,30 @@ const UserGoalsScreen: React.FC = () => {
   }
 
   function handleGoalDetails() {
-    navigation.navigate('User Goal Details' as never);
+    navigation.navigate("User Goal Details" as never);
   }
 
-  return <>
-    <View style={[{ gap: 10, paddingTop: 20 }]}>
-      {goals.map((goal, index) => (
-        <TouchableOpacity
-          key={goal._id}
-          style={[rowStyle, shadowProps]}
-          onPress={() => handleGoalDetails()}
+  return (
+    <>
+      <View style={containerStyle}>
+        <ImageBackground
+          source={require("../assets/wall.jpg")}
+          resizeMode="cover"
+          style={imgBGStyle}
         >
-          <Text
-            style={[nameStyle, { color: "black"}]}
-          >
-            {goal.name}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-  </>
-}
+          <ScrollView>
+            <View id="goals-list" style={choresListStyle}>
+              {goals.map((goal, index) => (
+                <UserGoalDetails key={index} name={goal.name} desc={goal.description} freq={goal.frequency}/>
+               
+              ))}
+
+            </View>
+          </ScrollView>
+        </ImageBackground>
+      </View>
+    </>
+  );
+};
 
 export default UserGoalsScreen;
