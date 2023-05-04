@@ -35,7 +35,7 @@ const NewGoalScreen: React.FC = () => {
 
       if (data.message.includes("Goal succesfully created!")) {
         Alert.alert(`${goalName} goal succesfully created!`);
-        navigation.navigate("User Goals" as never);
+        navigation.navigate("User Goal Details" as never);
       }
     } catch (error: any) {
       throw new Error(error.message);
