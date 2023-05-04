@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from "react";
 import {
-  TouchableOpacity,
   View,
   ViewStyle,
   TextStyle,
   ImageBackground,
   Text,
 } from "react-native";
+import { Checkbox } from "react-native-paper";
 import { useIsFocused } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { getGoals } from "./APIService";
 
-
 interface IGoal {
-    name: string;
-    value: string;
-    
+  name: string;
 }
-const UserGoalDetails: React.FC = () => {
+
+interface goalProps {
+  title: string;
+}
+
+const UserGoalDetails: React.FC<goalProps> = ({ title }) => {
   const [goals, setGoals] = useState([] as unknown as IGoal[]);
   const isFocused = useIsFocused();
   const token = useSelector((state: any) => state.token);
-  
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     handleGoalLoad();
@@ -58,11 +60,11 @@ const UserGoalDetails: React.FC = () => {
         resizeMode="cover"
         style={imgStyle}
       >
-        {goals.map((goal) => (
-          <TouchableOpacity  style={goalsListStyle}>
-            <Text>{goal.name}</Text>
-          </TouchableOpacity>
-        ))}
+          <Text>{title}</Text>
+        {/* <Checkbox
+          status={checked ? "checked" : "unchecked"}
+          onPress={() => setChecked(!checked)}
+        /> */}
       </ImageBackground>
     </View>
   );

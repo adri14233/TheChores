@@ -108,7 +108,7 @@ const GroupGoalsScreen: React.FC = () => {
   }
 
   function handleUserGoals () {
-    navigation.navigate("User Goals" as never);
+    navigation.navigate("User Goal Details" as never);
   }
 
 
@@ -128,7 +128,6 @@ const GroupGoalsScreen: React.FC = () => {
             </Text>
           </TouchableOpacity>
         ))}
-        <View></View>
         <TouchableOpacity style={buttonsStyle} onPress={() => handleNewGoal()}>
           <Text style={buttonTestStyle}>Create Goal</Text>
         </TouchableOpacity>

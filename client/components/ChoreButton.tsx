@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { TouchableOpacity, Text, Image, ViewStyle, TextStyle } from "react-native";
+import { TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
 import { postChore } from "./APIService";
 import { useNavigation } from "@react-navigation/native";
 
