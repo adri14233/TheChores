@@ -206,25 +206,28 @@ export async function postGoal(goal, token) {
       },
       body: JSON.stringify(goal),
     });
-   
-  const data = await resp.json()
+
+    const data = await resp.json()
     return data
   } catch (error) {
     throw new Error(err.message);
   }
 }
 
-export async function getGoals(token) {
- try {
-   const resp = await fetch(`${ROOT_URL}/goals`, {
-     headers: {
-       Authorization: `Bearer ${token}`,
-     },
-   });
+export async function getGoals(token, user) {
+  try {
+    const resp = await fetch(`${ROOT_URL}/goals`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({user: user})
+    });
 
-   const data = await resp.json();
-   return JSON.parse(data.message);
- } catch (err) {
-   throw new Error(err);
- }
+    const data = await resp.json();
+    return JSON.parse(data.message);
+  } catch (err) {
+    throw new Error(err);
+  }
 }
