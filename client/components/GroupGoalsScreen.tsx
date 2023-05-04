@@ -51,6 +51,28 @@ const scoreStyle: TextStyle = {
   fontWeight: "bold",
   fontFamily: "sans-serif",
 };
+ const buttonTestStyle: TextStyle = {
+   color: "black",
+   fontWeight: "900",
+   fontSize: 20,
+   fontFamily: "sans-serif",
+   textAlign: "center",
+ };
+ const buttonsStyle: TextStyle = {
+   backgroundColor: "#fff",
+   borderRadius: 10,
+   padding: 10,
+   marginVertical: 10,
+   marginHorizontal: 80,
+   alignItems: "center",
+   justifyContent: "center",
+   borderWidth: 2,
+   borderColor: "#000",
+   fontFamily: "sans-serif",
+   fontSize: 16,
+   color: "#000",
+   textTransform: "uppercase",
+ };
 
 const GroupGoalsScreen: React.FC = () => {
   const token = useSelector((state: any) => state.token);
@@ -92,11 +114,12 @@ const GroupGoalsScreen: React.FC = () => {
 
   return (
     <>
-      <View style={[{gap: 10, paddingTop: 20}]}>
+      <View style={[{ gap: 10, paddingTop: 20 }]}>
         {users.map((user, index) => (
-          <TouchableOpacity 
-          key={user._id} style={[rowStyle, shadowProps]}
-          onPress={() => handleUserGoals()}
+          <TouchableOpacity
+            key={user._id}
+            style={[rowStyle, shadowProps]}
+            onPress={() => handleUserGoals()}
           >
             <Text
               style={[nameStyle, { color: index === 0 ? "black" : "blue" }]}
@@ -105,10 +128,9 @@ const GroupGoalsScreen: React.FC = () => {
             </Text>
           </TouchableOpacity>
         ))}
-        <View>
-        </View>
-        <TouchableOpacity onPress={() => handleNewGoal()}>
-          <Text>Create Goal</Text>
+        <View></View>
+        <TouchableOpacity style={buttonsStyle} onPress={() => handleNewGoal()}>
+          <Text style={buttonTestStyle}>Create Goal</Text>
         </TouchableOpacity>
       </View>
     </>
