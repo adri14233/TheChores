@@ -18,8 +18,9 @@ import JoinGroupScreen from './components/JoinGroupScreen.tsx';
 import TasksScreen from './components/TasksScreen.tsx';
 import NewGroupScreen from './components/NewGroupScreen.tsx';
 import GroupGoalsScreen from './components/GroupGoalsScreen.tsx';
-import NewGoalScreen from './components/NewGoalScreen';
-import UserGoalDetails from './components/UserGoalDetails';
+import NewGoalScreen from './components/NewGoalScreen.tsx';
+import UserGoalDetails from './components/UserGoalDetails.tsx';
+import UserGoalsScreen from './components/UserGoalsScreen.tsx';
 
 
 export default function App() {
@@ -195,6 +196,21 @@ export default function App() {
             component={UserGoalDetails}
             options={{
               title: "GOAL DETAILS",
+              headerRight: null,
+              headerStyle: {
+                backgroundColor: "black",
+              },
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="User Goals"
+            component={UserGoalsScreen}
+            options={{
+              title: "USER GOALS",
               headerRight: null,
               headerStyle: {
                 backgroundColor: "black",

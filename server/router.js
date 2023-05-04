@@ -43,6 +43,6 @@ router.get("/user/:userId/group/:groupId/actions", getUserActionsInGroup);
 router.post("/login", getLogin);
 
 router.post("/goal", postGoal);
-router.get("/goals", getGoals);
+router.post("/goals", getGoals);
 
 module.exports = router;

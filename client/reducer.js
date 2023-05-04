@@ -4,7 +4,8 @@ const initialState = {
   email: '',
   password: '',
   token: '',
-  group: ''
+  group: '',
+  user: ''
 };
 
 const loginReducer = (state = initialState, action) => {
@@ -17,6 +18,8 @@ const loginReducer = (state = initialState, action) => {
       return {...state, token: action.payload};
     case 'SET_GROUP':
         return {...state, group: action.payload};
+    case 'SET_USER':
+        return {...state, user: action.payload};
     default:
       return state;
   }
