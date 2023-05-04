@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "./APIService";
 import { View, TouchableOpacity, Text, ViewStyle, TextStyle } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
@@ -78,6 +78,7 @@ const GroupGoalsScreen: React.FC = () => {
   const token = useSelector((state: any) => state.token);
   const group = useSelector((state: any) => state.group);
   let [users, setUsers] = useState([] as unknown as IUser[]);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
@@ -107,7 +108,8 @@ const GroupGoalsScreen: React.FC = () => {
     navigation.navigate("New Goal" as never);
   }
 
-  function handleUserGoals () {
+  function handleUserGoals (firstName: string) {
+    dispatch({ type: 'SET_USER', payload: firstName});
     navigation.navigate("User Goals" as never);
   }
 
@@ -119,7 +121,7 @@ const GroupGoalsScreen: React.FC = () => {
           <TouchableOpacity
             key={user._id}
             style={[rowStyle, shadowProps]}
-            onPress={() => handleUserGoals()}
+            onPress={() => handleUserGoals(user.firstName)}
           >
             <Text
               style={[nameStyle, { color: index === 0 ? "black" : "blue" }]}
