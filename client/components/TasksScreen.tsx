@@ -35,17 +35,7 @@ const choresListStyle: TextStyle = {
   fontFamily: "sans-serif",
   height: "100%",
 };
-const shadowProps: ViewStyle = {
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 3.84,
 
-  elevation: 6,
-};
 
 const TasksScreen: React.FC = () => {
   const [chores, setChores] = useState([] as unknown as IChore[]);
