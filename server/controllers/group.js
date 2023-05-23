@@ -17,7 +17,6 @@ const postGroup = async (ctx) => {
       try {
         let body = ctx.request.body;
         if (body.name === '') throw new Error();
-
         // Saving new group to DB
         const newGroup = new groupModel(body);
         await newGroup.save();
