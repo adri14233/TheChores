@@ -3,27 +3,16 @@
 const Router = require("koa-router");
 const router = new Router();
 
-const { postUser, getUser, getUsers } = require("./controllers/user");
-const {
-  postGroup,
-  getGroup,
-  getGroups,
-  postUserToGroup,
-} = require("./controllers/group");
+const { postUser, getUser, getUsers, postUserLogin } = require("./controllers/user");
+const { postGroup, getGroup, getGroups,postUserToGroup } = require("./controllers/group");
 const { postChore, getChore, getChores } = require("./controllers/chore");
-const {
-  postAction,
-  getAction,
-  getActions,
-  getUserActions,
-  getUserActionsInGroup,
-} = require("./controllers/action");
-const  {postGoal, getGoals}  = require("./controllers/goal");
-const { getLogin } = require("./utils/auth");
+const { postAction, getAction, getActions, getUserActions, getUserActionsInGroup } = require("./controllers/action");
+const { postGoal, getGoals }  = require("./controllers/goal");
 
 router.get("/user/:id", getUser);
 router.get("/users", getUsers);
 router.post("/user", postUser);
+router.post("/user/login", postUserLogin);
 
 router.get("/group/:id", getGroup);
 router.get("/groups", getGroups);
@@ -39,8 +28,6 @@ router.get("/actions", getActions);
 router.post("/action", postAction);
 router.get("/user/:id/actions", getUserActions);
 router.get("/user/:userId/group/:groupId/actions", getUserActionsInGroup);
-
-router.post("/login", getLogin);
 
 router.post("/goal", postGoal);
 router.post("/goals", getGoals);

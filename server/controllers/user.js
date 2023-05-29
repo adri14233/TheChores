@@ -3,7 +3,8 @@
 const userModel = require('../models/user');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const { auth } = require('../utils/auth');
+const jwt = require('jsonwebtoken');
+const SECURE = require('../SECURE');
 
 const postUser = async (ctx) => {
   // Check if the user already exists
@@ -42,14 +43,13 @@ const getUser = async (ctx) => {
 };
 
 const getUsers = async (ctx) => {
-  if (auth(ctx)) {
-    try {
-      const users = await userModel.find();
-      ctx.body = { message: JSON.stringify(users) };
-    } catch (err) {
-      ctx.status = 400;
-      ctx.body = { message: 'Could not retrieve all users.' };
-    }
+  try {
+    const users = await userModel.find();
+    ctx.body = { message: JSON.stringify(users) };
+    console.log(ctx.body)
+  } catch (err) {
+    ctx.status = 400;
+    ctx.body = { message: 'Could not retrieve all users.' };
   }
 };
 
@@ -66,4 +66,20 @@ const checkUserExist = async (username) => {
   }
 };
 
-module.exports = { postUser, getUsers, getUser, checkUserExist };
+const postUserLogin = async (ctx) => {
+  const { username, password } = ctx.request.body;
+
+  // Verify the username and password against the database
+  const user = await checkUserExist(username);
+  if (user && await bcrypt.compare(password, user.password)) {
+    // User is authenticated, generate a JWT with their user ID
+    const token = jwt.sign({ userId: user._id }, SECURE.JWT_SECRET);
+    ctx.body = { token };
+  } else {
+    // User is not authenticated, return 401 Unauthorized
+    ctx.status = 401;
+    ctx.body = { message: 'Invalid username or password' };
+  }
+}
+
+module.exports = { postUser, getUsers, getUser, checkUserExist, postUserLogin };

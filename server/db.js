@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const SECURE = require('./SECURE.js');
 
 mongoose.connect(
-  'mongodb' + SECURE.MONGO_DB + '/' + SECURE.DB_NAME,
+  'mongodb://' + SECURE.MONGO_DB + '/' + SECURE.DB_NAME,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) {
