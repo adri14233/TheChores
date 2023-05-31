@@ -23,7 +23,7 @@ export async function postAction(action, token) {
 
 export async function getLogin(creds) {
   try {
-    const resp = await fetch(ROOT_URL + "/login", {
+    const resp = await fetch(ROOT_URL + "/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,10 +31,12 @@ export async function getLogin(creds) {
       body: JSON.stringify(creds),
     });
 
-    if (!resp.ok) throw new Error("Failed to get token");
-
-    const data = await resp.json();
-    return data;
+    if (!resp.ok) {
+      const data = await resp.json();
+      throw new Error(data.message);
+    }
+    
+    return await resp.json();
   } catch (err) {
     throw new Error(err.message);
   }
